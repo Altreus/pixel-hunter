@@ -17,13 +17,18 @@ function makeGame(canvas, resolution) {
 
   function makeLevel() {
     canvas.style.cursor = "default";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     pixel = newPixel();
-    debugPixel();
+    drawPixel();
   }
   function newPixel() {
     return [getRandomInt(canvas.width / resolution), getRandomInt(canvas.height / resolution)];
   }
 
+  function drawPixel() {
+    ctx.fillStyle = 'rgb(200,10,10)';
+    ctx.fillRect(pixel[0] * resolution, pixel[1] * resolution, resolution, resolution);
+  }
   function debugPixel() {
     ctx.clearRect(0,15,100,15);
     ctx.fillText(pixel[0] + " " + pixel[1], 10, 30);
@@ -41,7 +46,7 @@ function makeGame(canvas, resolution) {
   }
 
   function changeCursor(e) {
-    debugEvent(e);
+    //debugEvent(e);
     if (thisIsThePixel(e.offsetX, e.offsetY)) {
       canvas.style.cursor = "pointer";
     }
