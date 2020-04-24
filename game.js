@@ -19,7 +19,6 @@ function makeGame(canvas, resolution) {
     canvas.style.cursor = "default";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     pixel = newPixel();
-    drawPixel();
   }
   function newPixel() {
     return [getRandomInt(canvas.width / resolution), getRandomInt(canvas.height / resolution)];
