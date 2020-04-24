@@ -62,6 +62,17 @@ function makeGame(canvas, resolution) {
       canvas.style.cursor = "default";
     }
   }
+  function highlightMousePixel(e) {
+    if (this.lastpx) {
+      ctx.clearRect(...rect(...this.lastpx));
+    }
+    var gridpx = px2grid(e.offsetX, e.offsetY);
+
+    ctx.fillStyle = 'rgb(10,200,80)';
+    ctx.fillRect(...rect(...gridpx));
+
+    this.lastpx = gridpx;
+  }
 
   function nextLevel(e) {
     if (thisIsThePixel(e.offsetX, e.offsetY)) {
@@ -70,6 +81,7 @@ function makeGame(canvas, resolution) {
   }
 
   canvas.addEventListener('mousemove', changeCursor);
+  canvas.addEventListener('mousemove', highlightMousePixel);
   canvas.addEventListener('click', nextLevel);
 }
 
