@@ -25,9 +25,20 @@ function makeGame(canvas, resolution) {
     return [getRandomInt(canvas.width / resolution), getRandomInt(canvas.height / resolution)];
   }
 
+  // returns the game pixel that contains the canvas pixel (x,y)
+  function px2grid(x,y) {
+    return [Math.floor(x / resolution), Math.floor(y / resolution)];
+  }
+
+  // returns the true-pixel coördinates for an area at game pixel x,y and h,w
+  // game pixels in size
+  function rect(x,y,w=1,h=1) {
+    return [x * resolution, y * resolution, w * resolution, h * resolution];
+  }
+
   function drawPixel() {
     ctx.fillStyle = 'rgb(200,10,10)';
-    ctx.fillRect(pixel[0] * resolution, pixel[1] * resolution, resolution, resolution);
+    ctx.fillRect(...rect(pixel[0], pixel[1]));
   }
   function debugPixel() {
     ctx.clearRect(0,15,100,15);
@@ -35,14 +46,12 @@ function makeGame(canvas, resolution) {
   }
   function debugEvent(e) {
     ctx.clearRect(0,0,100,15);
-    var adjustedX = Math.floor(e.offsetX / resolution);
-    var adjustedY = Math.floor(e.offsetY / resolution);
-    ctx.fillText(adjustedX + " " + adjustedY, 10, 10);
+    var rect = px2grid(e.offsetX, e.offsetY);
+    ctx.fillText(rect[0] + " " + rect[1], 10, 10);
   }
   function thisIsThePixel(x,y) {
-    var adjustedX = Math.floor(x / resolution);
-    var adjustedY = Math.floor(y / resolution);
-    return adjustedX == pixel[0] && adjustedY == pixel[1];
+    var rect = px2grid(x,y);
+    return rect[0] == pixel[0] && rect[1] == pixel[1];
   }
 
   function changeCursor(e) {
