@@ -3,6 +3,24 @@ Find the pixel!
 
 # Ideas
 
+## Canvas
+
+### Blank
+
+A blank canvas gives you no indication of the current pixel size and nothing interesting to look at while you painstakingly search for the hot spot
+
+### Grid
+
+A grid is the most basic way of showing the pixel size without adding any distractions or interest.
+
+### Pattern
+
+Should be fairly easy to create a random pattern from various algorithms.
+
+### Image
+
+An image would be great if we could pixellate it to the resolution of the current grid.
+
 ## Zen mode
 
 You can't lose!
