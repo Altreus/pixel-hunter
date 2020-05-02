@@ -50,7 +50,7 @@ local module = {}
         return math.atan2(self:getY(), self:getX())
     end
 
-    function v2d:getLength() --Return the length of the vector (i.e. the distance from (0,0), see README.md for examples of using this)
+    function v2d:getLength()
         return math.sqrt((self:getX() ^ 2) + (self:getY() ^ 2))
     end
 
@@ -64,23 +64,23 @@ local module = {}
         for i, vector in ipairs(vectors) do
             tmp = tmp + vector
         end
-        return tmp / module.Vector2D(n, n)
+        return tmp / module.Vector2D(n, n):getLength()
     end
 
     --Comparisons
 
     mt.__eq = function(lhs, rhs)
-        --Equal To operator for vector2Ds
+        --Equal To operator for vector2Ds. Compares values precisely
         return (lhs:getX() == rhs:getX()) and (lhs:getY() == rhs:getY())
     end
 
     mt.__lt = function(lhs, rhs)
-        --Less Than operator for vector2Ds
+        --Less Than operator for vector2Ds. Compares lengths.
         return lhs:getLength() < rhs:getLength()
     end
 
     mt.__le = function(lhs, rhs)
-        --Less Than Or Equal To operator for vector2Ds
+        --Less Than Or Equal To operator for vector2Ds. Compares lengths.
         return lhs:getLength() <= rhs:getLength()
     end
 
@@ -126,19 +126,20 @@ local module = {}
         return out
     end
 
-    mt.__mul = function(lhs, rhs)
-        --Multiplication operator for Vector2Ds
+    mt.__mul = function(lhs, k)
+        -- "Multiplying" vectors is silly. Use dot product or cross product.
+        -- This returns a scaled copy.
         local out = lhs:deepcopy(lhs)
-        out:setX(lhs:getX() * rhs:getX())
-        out:setY(lhs:getY() * rhs:getY())
+        out:setX(lhs:getX() * k)
+        out:setY(lhs:getY() * k)
         return out
     end
 
-    mt.__div = function(lhs, rhs)
-        --Division operator for Vector2Ds
+    mt.__div = function(lhs, k)
+        -- You can't divide two vectors. This returns a scaled copy.
         local out = lhs:deepcopy(lhs)
-        out:setX(lhs:getX() / rhs:getX())
-        out:setY(lhs:getY() / rhs:getY())
+        out:setX(lhs:getX() / k)
+        out:setY(lhs:getY() / k)
         return out
     end
 
