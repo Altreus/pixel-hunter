@@ -51,10 +51,7 @@ local module = {}
     end
 
     function v2d:getLength() --Return the length of the vector (i.e. the distance from (0,0), see README.md for examples of using this)
-        origin = self:deepcopy(self) --Get a new vector to work with
-        origin:setX(0) --Set the origin equal to the geometric origin
-        origin:setY(0)
-        return self .. origin --Linear distance from us to the origin
+        return math.sqrt((self:getX() ^ 2) + (self:getY() ^ 2))
     end
 
     function module.average (vectors)
@@ -79,12 +76,12 @@ local module = {}
 
     mt.__lt = function(lhs, rhs)
         --Less Than operator for vector2Ds
-        return (math.sqrt((lhs:getX()^2) + (lhs:getY()^2)) < math.sqrt((rhs:getX()^2) + (rhs:getY()^2))) --We do this to compute the linear value of the vector so that, for example, (a % b) < (c % d) will not be broken.
+        return lhs:getLength() < rhs:getLength()
     end
 
     mt.__le = function(lhs, rhs)
         --Less Than Or Equal To operator for vector2Ds
-        return (math.sqrt((lhs:getX()^2) + (lhs:getY()^2)) <= math.sqrt((rhs:getX()^2) + (rhs:getY()^2))) --We do this to compute the linear value of the vector so that, for example, (a % b) < (c % d) will not be broken.
+        return lhs:getLength() <= rhs:getLength()
     end
 
     --Operations
@@ -107,64 +104,60 @@ local module = {}
 
     mt.__unm = function(rhs)
         --Unary Minus (negation) operator for Vector2Ds
-        out = rhs:deepcopy(rhs) --Copy the operand for the output (else the output won't have metamethods)
-        out:setX(-rhs:getX()) --Operate on the X property
-        out:setY(-rhs:getY()) --Operate on the Y property
+        local out = rhs:deepcopy(rhs)
+        out:setX(-rhs:getX())
+        out:setY(-rhs:getY())
         return out
     end
 
     mt.__add = function(lhs, rhs)
         --Addition operator for Vector2Ds
-        out = lhs:deepcopy(lhs)--Copy the operand for the output (else the output won't have metamethods)
-        out:setX(lhs:getX() + rhs:getX()) --Operate on the X property
-        out:setY(lhs:getY() + rhs:getY()) --Operate on the Y property
+        local out = lhs:deepcopy(lhs)
+        out:setX(lhs:getX() + rhs:getX())
+        out:setY(lhs:getY() + rhs:getY())
         return out
     end
 
     mt.__sub = function(lhs, rhs)
         --Subtraction operator for Vector2Ds
-        out = lhs:deepcopy(lhs)--Copy the operand for the output (else the output won't have metamethods)
-        out:setX(lhs:getX() - rhs:getX()) --Operate on the X property
-        out:setY(lhs:getY() - rhs:getY()) --Operate on the Y property
+        local out = lhs:deepcopy(lhs)
+        out:setX(lhs:getX() - rhs:getX())
+        out:setY(lhs:getY() - rhs:getY())
         return out
     end
 
     mt.__mul = function(lhs, rhs)
         --Multiplication operator for Vector2Ds
-        out = lhs:deepcopy(lhs)--Copy the operand for the output (else the output won't have metamethods)
-        out:setX(lhs:getX() * rhs:getX()) --Operate on the X property
-        out:setY(lhs:getY() * rhs:getY()) --Operate on the Y property
+        local out = lhs:deepcopy(lhs)
+        out:setX(lhs:getX() * rhs:getX())
+        out:setY(lhs:getY() * rhs:getY())
         return out
     end
 
     mt.__div = function(lhs, rhs)
         --Division operator for Vector2Ds
-        out = lhs:deepcopy(lhs)--Copy the operand for the output (else the output won't have metamethods)
-        out:setX(lhs:getX() / rhs:getX()) --Operate on the X property
-        out:setY(lhs:getY() / rhs:getY()) --Operate on the Y property
+        local out = lhs:deepcopy(lhs)
+        out:setX(lhs:getX() / rhs:getX())
+        out:setY(lhs:getY() / rhs:getY())
         return out
     end
 
     mt.__mod = function(lhs, rhs)
         --Vector distance operator for Vector2Ds. Denoted by modulo (%)
-        out = lhs:deepcopy(lhs)     --Copy the operand for the output (else the output won't have metamethods)
-        out:setX(math.abs(rhs:getX() - lhs:getX())) --Operate on the X property
-        out:setY(math.abs(rhs:getY() - lhs:getY())) --Operate on the Y property
+        local out = lhs:deepcopy(lhs)
+        out:setX(math.abs(rhs:getX() - lhs:getX()))
+        out:setY(math.abs(rhs:getY() - lhs:getY()))
         return out
     end
 
     mt.__concat = function(lhs, rhs)
         --Linear distance operator for Vector2Ds. Denoted by concat (..)
-        out = 0     --This is a linear operation, so no deepcopy.
-        out = math.sqrt(((lhs:getX() - rhs:getX())^2) + ((rhs:getY() - lhs:getY())^2)) --Distance formula
-        return out
+        return lhs:getLength() + rhs:getLength()
     end
 
     mt.__tostring = function(self)
         --tostring handler for Vector2D
-        out = ""    --This is a string operation, so no deepcopy.
-        out = "[(X:"..self:getX().."),(Y:"..self:getY()..")]"
-        return out
+        return "[(X:"..self:getX().."),(Y:"..self:getY()..")]"
     end
 
     setmetatable(v2d, mt)
