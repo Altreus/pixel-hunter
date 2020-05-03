@@ -4,6 +4,7 @@ require('dumper')
 
 function love.load()
     cursor = love.mouse.getSystemCursor('hand')
+    game = {}
     level = {
         rect = geo.Rect(
             love.math.random(8,30),
@@ -31,10 +32,17 @@ function love.load()
 end
 
 function love.update()
-
+    if level.pixel:contains(geo.Vec(love.mouse.getX(), love.mouse.getY())) then
+        love.mouse.setCursor(cursor)
+        game.pixelFound = true
+    else
+        love.mouse.setCursor()
+        game.pixelFound = false
+    end
 end
 
 function love.draw()
+    love.graphics.setColor(255,255,255,255)
     love.graphics.rectangle(
         "fill",
         level.rect.topLeft:getX(),
@@ -42,4 +50,14 @@ function love.draw()
         level.rect:getWidth(),
         level.rect:getHeight()
     )
+    if game.pixelFound then
+        love.graphics.setColor(0,0,0,255)
+        love.graphics.rectangle(
+            "fill",
+            level.pixel.topLeft:getX(),
+            level.pixel.topLeft:getY(),
+            level.pixel:getWidth(),
+            level.pixel:getHeight()
+        )
+    end
 end
