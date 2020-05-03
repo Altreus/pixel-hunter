@@ -2,7 +2,7 @@ local vec2d = require('vectorial2')
 local Vec = vec2d.Vector2D
 local Class = require('class')
 local module = {}
-Rect = Class:extends()
+local Rect = Class:extends()
 
 function Rect:new(x1, y1, x2, y2)
     if x2 == nil then
@@ -45,10 +45,10 @@ end
 
 function Rect:contains(vec)
     return (
-        vec:getX() <= self.bottomRight():getX()
-    and vec:getY() <= self.bottomRight():getY()
-    and vec:getX() >= self.topLeft():getX()
-    and vec:getY() >= self.topRight():getY()
+        vec:getX() <= self.bottomRight:getX()
+    and vec:getY() <= self.bottomRight:getY()
+    and vec:getX() >= self.topLeft:getX()
+    and vec:getY() >= self.topLeft:getY()
     )
 end
 
