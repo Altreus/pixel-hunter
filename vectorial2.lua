@@ -156,9 +156,12 @@ local module = {}
         return lhs:getLength() + rhs:getLength()
     end
 
-    mt.__tostring = function(self)
-        --tostring handler for Vector2D
+    function v2d:toString()
         return "[(X:"..self:getX().."),(Y:"..self:getY()..")]"
+    end
+
+    mt.__tostring = function(self)
+        return self:toString()
     end
 
     setmetatable(v2d, mt)

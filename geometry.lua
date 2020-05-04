@@ -52,6 +52,14 @@ function Rect:contains(vec)
     )
 end
 
+function Rect:toString()
+    return "Rect( " .. tostring(self.topLeft) .. " : " .. tostring(self.bottomRight) .. " )"
+end
+
+function Rect.__tostring(rect)
+    return rect:toString()
+end
+
 module.Vec = Vec
 module.Rect = Rect
 
