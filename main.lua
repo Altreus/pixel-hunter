@@ -1,5 +1,4 @@
 local geo = require('geometry')
-require('scaler')
 local Level = require('level')
 require('dumper')
 
@@ -26,11 +25,24 @@ function love.update()
 end
 
 function love.draw()
-    love.graphics.setColor(255,255,255,255)
+    love.graphics.setColor(1,1,1)
     love.graphics.rectangle(
         "fill",
         unpack(game.level:getGridDrawBox())
     )
+
+    local pointedAt = game.level:getGridPixelContaining(
+        geo.Vec(love.mouse.getX(), love.mouse.getY())
+    )
+
+    if pointedAt then
+        love.graphics.setColor(1, .2, .2, .2)
+        love.graphics.rectangle(
+            "fill",
+            unpack( game.level:getPixelDrawBox(pointedAt) )
+        )
+    end
+
     if game.pixelFound then
         love.graphics.setColor(0,0,0,255)
         love.graphics.rectangle(

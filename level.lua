@@ -35,34 +35,59 @@ function Level:new(params)
     self.offset = centreRect(drawRect, params.windowRect)
     self.drawRect = drawRect:translated(self.offset)
 
-    local drawPixel = self.pixel * self.scale
+end
+
+function Level:pixelContains(vec)
+    return self:getPixelRect(self.pixel):contains(vec)
+end
+
+function Level:getGridPixelContaining(vec)
+    local x = vec:getX() - self.offset:getX()
+    local y = vec:getY() - self.offset:getY()
+
+    local gridX = math.floor(x / self.scale)
+    local gridY = math.floor(y / self.scale)
+
+    if gridX < 0
+    or gridY < 0
+    or gridX > self.rect:getWidth()
+    or gridY > self.rect:getHeight()
+        then
+            return nil
+        end
+
+    return geo.Vec(gridX, gridY)
+end
+
+function Level:getDrawBox(rect)
+    return {
+        rect.topLeft:getX(),
+        rect.topLeft:getY(),
+        rect:getWidth(),
+        rect:getHeight()
+    }
+end
+
+function Level:getGridDrawBox()
+    return self:getDrawBox(self.drawRect)
+end
+
+function Level:getPixelDrawBox(px)
+    if px == nil then
+        px = self.pixel
+    end
+
+    return self:getDrawBox(self:getPixelRect(px))
+end
+
+function Level:getPixelRect(px)
+    local drawPixel = px * self.scale
     drawPixel = geo.Rect(
         drawPixel:getX(), drawPixel:getY(),
         drawPixel:getX() + self.scale, drawPixel:getY() + self.scale
     )
-    self.drawPixel = drawPixel:translated(self.offset)
-end
-
-function Level:pixelContains(vec)
-    return self.drawPixel:contains(vec)
-end
-
-function Level:getGridDrawBox()
-    return {
-        self.drawRect.topLeft:getX(),
-        self.drawRect.topLeft:getY(),
-        self.drawRect:getWidth(),
-        self.drawRect:getHeight()
-    }
-end
-
-function Level:getPixelDrawBox()
-    return {
-        self.drawPixel.topLeft:getX(),
-        self.drawPixel.topLeft:getY(),
-        self.drawPixel:getWidth(),
-        self.drawPixel:getHeight()
-    }
+    drawPixel = drawPixel:translated(self.offset)
+    return drawPixel
 end
 
 function Level:toString()
