@@ -48,8 +48,8 @@ function Level:getGridPixelContaining(vec)
 
     if gridX < 0
     or gridY < 0
-    or gridX > self.rect:getWidth()
-    or gridY > self.rect:getHeight()
+    or gridX >= self.rect:getWidth()
+    or gridY >= self.rect:getHeight()
         then
             return nil
         end
