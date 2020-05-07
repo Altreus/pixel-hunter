@@ -12,8 +12,8 @@ function Button:new(image, x1, y1, x2, y2)
 end
 
 function Button:draw()
-    love.setColor()
-    love.drawImage(self.image, self.topLeft:getX(), self.topLeft:getY())
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(self.image, self.topLeft:getX(), self.topLeft:getY())
 end
 
 return Button
