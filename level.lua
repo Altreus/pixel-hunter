@@ -24,8 +24,8 @@ function Level:new(params)
     self.rect = geo.Rect( h,w )
 
     self.pixel = geo.Vec(
-        love.math.random(1, self.rect:getWidth()),
-        love.math.random(1, self.rect:getHeight())
+        love.math.random(0, self.rect:getWidth() - 1),
+        love.math.random(0, self.rect:getHeight() - 1)
     )
 
     self.scale = scaleFactor(self.rect, params.windowRect)
