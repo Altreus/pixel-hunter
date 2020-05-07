@@ -14,11 +14,11 @@ function sizeRange(difficulty)
 end
 
 function Level:new(params)
-    local difficulty = params.difficulty or 1
+    self.difficulty = params.difficulty or 1
 
     assert(params.windowRect, "Must pass windowRect to Level()")
 
-    local sizeRange = sizeRange(difficulty)
+    local sizeRange = sizeRange(self.difficulty)
     local h = params.height or love.math.random(unpack(sizeRange))
     local w = params.width or love.math.random(unpack(sizeRange))
     self.rect = geo.Rect( h,w )

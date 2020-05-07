@@ -38,17 +38,20 @@ end
 function love.mousereleased(x,y,button)
     if button ~= 1 then return end
 
+    local windowRect = geo.Rect(
+        love.graphics.getWidth(),
+        love.graphics.getHeight()
+    )
     local mousePoint = geo.Vec(x,y)
 
     if game.level then
         if game.pixelFound then
-            -- next level
+            game.level = Level{
+                windowRect = windowRect,
+                difficulty = game.level.difficulty + 1
+            }
         end
     elseif startButton:contains(mousePoint) then
-        local windowRect = geo.Rect(
-            love.graphics.getWidth(),
-            love.graphics.getHeight()
-        )
         game.level = Level{windowRect = windowRect}
 
         print("Created new level:\n" .. tostring(game.level))
