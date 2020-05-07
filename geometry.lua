@@ -24,23 +24,31 @@ function Rect:getHeight()
     return self.bottomRight:getY() - self.topLeft:getY()
 end
 
+function Rect:translate(vec)
+    self.topLeft = self.topLeft + vec
+    self.bottomRight = self.bottomRight + vec
+    return self
+end
+
 function Rect:translated(vec)
-    if type(vec) == "number" then
-        vec = Vec(vec,vec)
-    end
-    return Rect(
-        self.topLeft:getX() + vec:getX(),
-        self.topLeft:getY() + vec:getY(),
-        self.bottomRight:getX() + vec:getX(),
-        self.bottomRight:getY() + vec:getY()
-    )
+    local ret = self:deepcopy()
+    ret.topLeft = ret.topLeft + vec
+    ret.bottomight = ret.bottomight + vec
+    return ret
+end
+
+function Rect:scale(x,y)
+    local r = self:scaled(x,y)
+    self.topLeft = r.topLeft
+    self.bottomight = r.bottomight
+    return self
 end
 
 function Rect:scaled(x,y)
     if y == nil then y = x end
 
     local rect = Rect(self:getWidth() * x, self:getHeight() * y)
-    return rect:translated(self.topLeft:getX(), self.topLeft:getY())
+    return rect:translate(self.topLeft)
 end
 
 function Rect:contains(vec)
@@ -52,8 +60,27 @@ function Rect:contains(vec)
     )
 end
 
+---------------
+-- Programmy functions
+---------------
+
+function Rect:deepcopy()
+    return Rect(
+        self.topLeft:getX(), self.topLeft:getY(),
+        self.bottomRight:getX(), self.bottomRight:getY()
+    )
+end
+
 function Rect:toString()
     return "Rect( " .. tostring(self.topLeft) .. " : " .. tostring(self.bottomRight) .. " )"
+end
+
+-- We add two rects by adding their corner vectors together
+function Rect.__add(rect1, rect2)
+    local out = rect1:deepcopy()
+    out.topLeft = rect1.topLeft + rect2.topLeft
+    out.bottomRight = rect1.bottomRight + rect2.bottomRight
+    return out
 end
 
 function Rect.__tostring(rect)

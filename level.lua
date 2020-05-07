@@ -23,8 +23,6 @@ function Level:new(params)
     local w = params.width or love.math.random(unpack(sizeRange))
     self.rect = geo.Rect( h,w )
 
-    print(tostring(self.rect))
-
     self.pixel = geo.Vec(
         love.math.random(1, self.rect:getWidth()),
         love.math.random(1, self.rect:getHeight())
@@ -33,8 +31,8 @@ function Level:new(params)
     self.scale = scaleFactor(self.rect, params.windowRect)
     local drawRect = self.rect:scaled(self.scale)
     self.offset = centreRect(drawRect, params.windowRect)
-    self.drawRect = drawRect:translated(self.offset)
-
+    drawRect:translate(self.offset)
+    self.drawRect = drawRect
 end
 
 function Level:pixelContains(vec)
@@ -86,7 +84,7 @@ function Level:getPixelRect(px)
         drawPixel:getX(), drawPixel:getY(),
         drawPixel:getX() + self.scale, drawPixel:getY() + self.scale
     )
-    drawPixel = drawPixel:translated(self.offset)
+    drawPixel:translate(self.offset)
     return drawPixel
 end
 
