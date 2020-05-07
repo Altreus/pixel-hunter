@@ -35,19 +35,20 @@ function love.draw()
         geo.Vec(love.mouse.getX(), love.mouse.getY())
     )
 
-    if pointedAt then
-        love.graphics.setColor(1, .2, .2, .2)
-        love.graphics.rectangle(
-            "fill",
-            unpack( game.level:getPixelDrawBox(pointedAt) )
-        )
-    end
-
     if game.pixelFound then
         love.graphics.setColor(0,0,0,255)
         love.graphics.rectangle(
             "fill",
             unpack(game.level:getPixelDrawBox())
+        )
+    end
+
+    if pointedAt then
+        love.graphics.setColor(1, .2, .2, 1)
+        love.graphics.setLineWidth(4)
+        love.graphics.rectangle(
+            "line",
+            unpack( game.level:getPixelDrawBox(pointedAt) )
         )
     end
 end
