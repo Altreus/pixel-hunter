@@ -6,7 +6,7 @@ local Level = Class:extends()
 
 function sizeRange(difficulty)
     local min = 10
-    local max = 30
+    local max = 22
     min = min * (1 + (0.2 * difficulty))
     max = max * (1 + (0.2 * difficulty))
 
