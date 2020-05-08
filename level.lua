@@ -121,11 +121,59 @@ function Level:getPixelRect(px)
     return drawPixel
 end
 
+function Level:isBeaten()
+    return self.beaten
+end
+
+function Level:onClick()
+    local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
+    if self:pixelContains(mousePoint) then
+        self.beaten = true
+    end
+end
+
+function Level:update(dt)
+    local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
+    local cursor = love.mouse.getSystemCursor('hand')
+    if self:pixelContains(mousePoint) then
+        love.mouse.setCursor(cursor)
+    else
+        love.mouse.setCursor()
+    end
+end
+
 function Level:draw()
     local drawBox = self:getGridDrawBox()
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(self.image, drawBox[1], drawBox[2])
+
+    local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
+    if self.fadeInAlpha then
+        love.graphics.setColor(1,1,1,self.fadeInAlpha)
+        love.graphics.rectangle(
+            "fill",
+            unpack(self:getPixelDrawBox())
+        )
+    end
+
+    if self:pixelContains(mousePoint) then
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.rectangle(
+            "fill",
+            unpack(self:getPixelDrawBox())
+        )
+    end
+
+    local pointedAt = self:getGridPixelContaining(mousePoint)
+    if pointedAt then
+        love.graphics.setColor(1, .2, .2, 1)
+        love.graphics.setLineWidth(4)
+        love.graphics.rectangle(
+            "line",
+            unpack( self:getPixelDrawBox(pointedAt) )
+        )
+    end
 end
 
 function Level:toString()
