@@ -33,6 +33,39 @@ function Level:new(params)
     self.offset = centreRect(drawRect, params.windowRect)
     drawRect:translate(self.offset)
     self.drawRect = drawRect
+
+    local imageList = love.filesystem.getDirectoryItems('img/backgrounds')
+    local image = love.graphics.newImage(
+        'img/backgrounds/' .. imageList[love.math.random(#imageList)]
+    )
+    local imageRect = geo.Rect(image:getPixelWidth(), image:getPixelHeight())
+    local imageScale = 1/scaleFactor(self.rect, imageRect)
+    imageRect:scale(imageScale)
+
+    local canvas = love.graphics.newCanvas(
+        self.rect:getWidth(), self.rect:getHeight()
+    )
+    -- this will give us the image position, i.e. a negative number.
+    local canvasOffset = centreRect(
+        imageRect, self.rect
+    )
+    local canvasScale = scaleFactor(self.rect, self.drawRect)
+
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.setCanvas(canvas)
+    love.graphics.draw(image, canvasOffset:getX(), canvasOffset:getY(), 0, imageScale)
+
+    local bigCanvas = love.graphics.newCanvas(
+        drawRect:getWidth(), drawRect:getHeight()
+    )
+    local canvasScale = scaleFactor(self.rect, self.drawRect)
+
+    love.graphics.setCanvas(bigCanvas)
+    canvas:setFilter('nearest', 'nearest')
+    love.graphics.draw(canvas, 0, 0, 0, canvasScale)
+    love.graphics.setCanvas()
+
+    self.image = bigCanvas
 end
 
 function Level:pixelContains(vec)
@@ -86,6 +119,13 @@ function Level:getPixelRect(px)
     )
     drawPixel:translate(self.offset)
     return drawPixel
+end
+
+function Level:draw()
+    local drawBox = self:getGridDrawBox()
+
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(self.image, drawBox[1], drawBox[2])
 end
 
 function Level:toString()

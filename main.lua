@@ -59,12 +59,7 @@ end
 
 function love.draw()
     if game.level then
-        love.graphics.setColor(1,1,1)
-        love.graphics.rectangle(
-            "fill",
-            unpack(game.level:getGridDrawBox())
-        )
-
+        game.level:draw()
         local pointedAt = game.level:getGridPixelContaining(
             geo.Vec(love.mouse.getX(), love.mouse.getY())
         )
