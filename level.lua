@@ -21,7 +21,7 @@ function Level:new(params)
     local sizeRange = sizeRange(self.difficulty)
     local h = params.height or love.math.random(unpack(sizeRange))
     local w = params.width or love.math.random(unpack(sizeRange))
-    self.rect = geo.Rect( h,w )
+    self.rect = geo.Rect(w, h)
 
     self.pixel = geo.Vec(
         love.math.random(0, self.rect:getWidth() - 1),
