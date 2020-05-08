@@ -62,9 +62,12 @@ function love.mousereleased(x,y,button)
 
         print("Created new level:\n" .. tostring(game.level))
     elseif bgHelpText:contains(mousePoint) then
-        love.system.openURL(
-            'file://' .. love.filesystem.getSaveDirectory() .. '/img/backgrounds'
-        )
+        local dir = love.filesystem.getSaveDirectory() .. '/img/backgrounds'
+
+        if not love.filesystem.getInfo(dir) then
+            love.filesystem.createDirectory(dir)
+        end
+        love.system.openURL(dir)
     end
 end
 
