@@ -82,5 +82,13 @@ function love.draw()
         end
     else
         startButton:draw()
+
+        local text = love.graphics.newText(
+            love.graphics.getFont(),
+            "Add custom backgrounds to "
+            .. love.filesystem.getSaveDirectory()
+            .. '/img/backgrounds'
+        )
+        love.graphics.draw(text, 10,10)
     end
 end
