@@ -13,6 +13,13 @@ function love.load()
 
     startButton = Button(love.graphics.newImage('img/start-button.png'))
     startButton:translate(centreRect(startButton, windowRect))
+    bgHelpText = Button(love.graphics.newText(
+        love.graphics.getFont(),
+        "Add custom backgrounds to "
+        .. love.filesystem.getSaveDirectory()
+        .. '/img/backgrounds'
+    ))
+    bgHelpText:translate(geo.Vec(10,10))
 end
 
 function love.update()
@@ -26,7 +33,7 @@ function love.update()
             game.pixelFound = false
         end
     else
-        if startButton:contains(mousePoint) then
+        if startButton:contains(mousePoint) or bgHelpText:contains(mousePoint) then
             love.mouse.setCursor(cursor)
         else
             love.mouse.setCursor()
@@ -54,6 +61,10 @@ function love.mousereleased(x,y,button)
         game.level = Level{windowRect = windowRect}
 
         print("Created new level:\n" .. tostring(game.level))
+    elseif bgHelpText:contains(mousePoint) then
+        love.system.openURL(
+            'file://' .. love.filesystem.getSaveDirectory() .. '/img/backgrounds'
+        )
     end
 end
 
@@ -82,13 +93,6 @@ function love.draw()
         end
     else
         startButton:draw()
-
-        local text = love.graphics.newText(
-            love.graphics.getFont(),
-            "Add custom backgrounds to "
-            .. love.filesystem.getSaveDirectory()
-            .. '/img/backgrounds'
-        )
-        love.graphics.draw(text, 10,10)
+        bgHelpText:draw()
     end
 end
