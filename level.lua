@@ -138,25 +138,33 @@ function Level:update(dt)
     local cursor = love.mouse.getSystemCursor('hand')
     local alphaStep = 0.8*dt*2
 
-    if self:pixelContains(mousePoint) then
+    if love.keyboard.isDown('p') then
+        self:fadeToWhite(alphaStep)
+    elseif self:pixelContains(mousePoint) then
         love.mouse.setCursor(cursor)
-
-        if self.fadeInAlpha >= 0 and self.fadeInAlpha < 0.8 then
-            self.fadeInAlpha = self.fadeInAlpha + alphaStep
-        end
-        if self.fadeInAlpha > 0.8 then
-            self.fadeInAlpha = 0.8
-        end
+        self:fadeToWhite(alphaStep)
     else
-        if self.fadeInAlpha >= 0 then
-            self.fadeInAlpha = self.fadeInAlpha - alphaStep
-        end
-        if self.fadeInAlpha < 0 then
-            self.fadeInAlpha = 0
-        end
         love.mouse.setCursor()
+        self:fadeToColour(alphaStep)
     end
+end
 
+function Level:fadeToWhite(alphaStep)
+    if self.fadeInAlpha < 0.8 then
+        self.fadeInAlpha = self.fadeInAlpha + alphaStep
+    end
+    if self.fadeInAlpha > 0.8 then
+        self.fadeInAlpha = 0.8
+    end
+end
+
+function Level:fadeToColour(alphaStep)
+    if self.fadeInAlpha >= 0 then
+        self.fadeInAlpha = self.fadeInAlpha - alphaStep
+    end
+    if self.fadeInAlpha < 0 then
+        self.fadeInAlpha = 0
+    end
 end
 
 function Level:draw()
@@ -174,7 +182,7 @@ function Level:draw()
     end
 
     local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
-    if self:pixelContains(mousePoint) then
+    if self:pixelContains(mousePoint) or love.keyboard.isDown('p') then
         love.graphics.setColor(0,0,0,1)
         love.graphics.rectangle(
             "fill",
