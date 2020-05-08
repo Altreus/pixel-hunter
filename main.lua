@@ -2,7 +2,6 @@ local geo = require 'geometry'
 local Level = require 'level'
 local Button = require 'ui.button'
 require 'scaler'
-require 'dumper'
 
 function love.load()
     cursor = love.mouse.getSystemCursor('hand')
