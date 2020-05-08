@@ -40,7 +40,7 @@ end
 function Rect:scale(x,y)
     local r = self:scaled(x,y)
     self.topLeft = r.topLeft
-    self.bottomight = r.bottomight
+    self.bottomRight = r.bottomRight
     return self
 end
 
