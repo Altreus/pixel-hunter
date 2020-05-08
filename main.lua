@@ -45,8 +45,8 @@ function love.mousereleased(x,y,button)
     local mousePoint = geo.Vec(x,y)
 
     if game.level then
-        level:onClick()
-        if level:isBeaten() then
+        game.level:onClick()
+        if game.level:isBeaten() then
             game.level = Level{
                 windowRect = windowRect,
                 difficulty = game.level.difficulty + 1
