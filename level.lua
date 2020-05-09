@@ -4,13 +4,21 @@ local geo = require('geometry')
 -- an XY grid size in a vector
 local Level = geo.Rect:extends()
 
-function sizeRange(difficulty)
-    local min = 10
-    local max = 22
-    min = min * (1 + (0.2 * difficulty))
-    max = max * (1 + (0.2 * difficulty))
+function makeGrid(difficulty)
+    -- Basically, the grid should be approximately 10x10 at level 1, 11x11 at
+    -- level 2, etc
+    local gridSide = (10 + math.floor(difficulty/2))
 
-    return {min, max}
+    -- But we don't want it to be square so perturb one dimension
+    local gridOtherSide = gridSide * (love.math.random(60,166) / 100)
+
+    -- Now scale the original side to approximate the original total area
+    gridSide = (gridSide ^ 2) / gridOtherSide
+
+    return geo.Vec(
+        math[ love.math.random(0,1) and "floor" or "ceil" ](gridSide),
+        math[ love.math.random(0,1) and "floor" or "ceil" ](gridOtherSide)
+    )
 end
 
 function getAnImage()
@@ -27,18 +35,22 @@ function Level:new(params)
 
     self.fadeInAlpha = 0
 
-    local sizeRange = sizeRange(self.difficulty)
-    local h = params.height or love.math.random(unpack(sizeRange))
-    local w = params.width or love.math.random(unpack(sizeRange))
+    local grid = makeGrid(self.difficulty)
+
+    if params.height then
+        grid:setY(params.height)
+    end
+    if params.width then
+        grid:setX(params.width)
+    end
 
     self.pixel = geo.Vec(
-        love.math.random(0, w - 1),
-        love.math.random(0, h - 1)
+        love.math.random(0, grid:getX() - 1),
+        love.math.random(0, grid:getY() - 1)
     )
 
-    local grid = geo.Vec(w, h)
     local scale = scaleFactor(grid, params.maxSize)
-    Level.super.new(self, w * scale, h * scale)
+    Level.super.new(self, grid:getX() * scale, grid:getY() * scale)
     self:centreIn(geo.Rect(params.maxSize:getX(), params.maxSize:getY()))
     self.grid = grid
 
@@ -69,8 +81,6 @@ function Level:new(params)
     love.graphics.setCanvas()
 
     self.image = bigCanvas
-
-    print(self:toString())
 end
 
 function Level:pixelContains(vec)
