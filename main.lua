@@ -27,6 +27,12 @@ function love.update(dt)
     local cursor = love.mouse.getSystemCursor('hand')
     if game.level then
         game.level:update(dt)
+        game.hud:update(dt)
+
+        if game.hud:timeUp() then
+            game.level = nil
+            game.hud = nil
+        end
     else
         if startButton:contains(mousePoint) or bgHelpText:contains(mousePoint) then
             love.mouse.setCursor(cursor)
@@ -55,6 +61,7 @@ function love.mousereleased(x,y,button)
                 difficulty = game.level.difficulty + 1
             }
             game.level:translate(windowRect.topLeft)
+            game.hud.timer = 30
         end
     elseif startButton:contains(mousePoint) then
         game.hud = hud
