@@ -1,6 +1,7 @@
 local geo = require 'geometry'
 local Level = require 'level'
 local Button = require 'ui.button'
+local HUD = require 'hud'
 require 'scaler'
 
 function love.load()
@@ -38,7 +39,9 @@ end
 function love.mousereleased(x,y,button)
     if button ~= 1 then return end
 
+    local hud = HUD()
     local windowRect = geo.Rect(
+        hud:getWidth(), 0,
         love.graphics.getWidth(),
         love.graphics.getHeight()
     )
@@ -54,6 +57,7 @@ function love.mousereleased(x,y,button)
             game.level:translate(windowRect.topLeft)
         end
     elseif startButton:contains(mousePoint) then
+        game.hud = hud
         game.level = Level{maxSize = windowRect:getDiagonalVec()}
         game.level:translate(windowRect.topLeft)
     elseif bgHelpText:contains(mousePoint) then
@@ -68,6 +72,7 @@ end
 
 function love.draw()
     if game.level then
+        game.hud:draw()
         game.level:draw()
     else
         startButton:draw()
