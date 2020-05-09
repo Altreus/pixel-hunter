@@ -31,10 +31,10 @@ function Level:new(params)
     local h = params.height or love.math.random(unpack(sizeRange))
     local w = params.width or love.math.random(unpack(sizeRange))
 
-    self.pixel = geo.Vec(0,0)
-        --love.math.random(0, w - 1),
-        --love.math.random(0, h - 1)
-    --)
+    self.pixel = geo.Vec(
+        love.math.random(0, w - 1),
+        love.math.random(0, h - 1)
+    )
 
     local grid = geo.Vec(w, h)
     local scale = scaleFactor(grid, params.maxSize)
