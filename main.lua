@@ -11,7 +11,7 @@ function love.load()
     )
 
     startButton = Button(love.graphics.newImage('img/start-button.png'))
-    startButton:translate(centreRect(startButton, windowRect))
+    startButton:centreIn(windowRect)
     bgHelpText = Button(love.graphics.newText(
         love.graphics.getFont(),
         "Add custom backgrounds to "
@@ -48,12 +48,14 @@ function love.mousereleased(x,y,button)
         game.level:onClick()
         if game.level:isBeaten() then
             game.level = Level{
-                windowRect = windowRect,
+                maxSize = windowRect:getDiagonalVec(),
                 difficulty = game.level.difficulty + 1
             }
+            game.level:translate(windowRect.topLeft)
         end
     elseif startButton:contains(mousePoint) then
-        game.level = Level{windowRect = windowRect}
+        game.level = Level{maxSize = windowRect:getDiagonalVec()}
+        game.level:translate(windowRect.topLeft)
     elseif bgHelpText:contains(mousePoint) then
         local dir = love.filesystem.getSaveDirectory() .. '/img/backgrounds'
 

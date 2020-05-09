@@ -54,14 +54,15 @@ local module = {}
         return math.sqrt((self:getX() ^ 2) + (self:getY() ^ 2))
     end
 
-    function module.average (vectors)
-        local n = #vectors
+    -- NOT a method!
+    function v2d.average (...)
+        local n = #arg
         local tmp = module.Vector2D(0, 0)
         local j = 1 --Position in new_vectors
         if n == 0 then
             error("average() called with 0 inputs!")
         end
-        for i, vector in ipairs(vectors) do
+        for i, vector in ipairs(arg) do
             tmp = tmp + vector
         end
         return tmp / module.Vector2D(n, n):getLength()
@@ -69,9 +70,13 @@ local module = {}
 
     --Comparisons
 
+    function v2d:equals(rhs)
+        return (self:getX() == rhs:getX()) and (self:getY() == rhs:getY())
+    end
+
     mt.__eq = function(lhs, rhs)
         --Equal To operator for vector2Ds. Compares values precisely
-        return (lhs:getX() == rhs:getX()) and (lhs:getY() == rhs:getY())
+        return lhs:equals(rhs)
     end
 
     mt.__lt = function(lhs, rhs)
@@ -100,6 +105,10 @@ local module = {}
 
     function v2d:getY()
         return self.v.y
+    end
+
+    function v2d:getXY()
+      return {self:getX(), self:getY()}
     end
 
     mt.__unm = function(rhs)

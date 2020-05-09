@@ -24,6 +24,33 @@ function Rect:getHeight()
     return self.bottomRight:getY() - self.topLeft:getY()
 end
 
+function Rect:getDiagonalVec()
+    return self.bottomRight - self.topLeft
+end
+
+function Rect:asXYHW()
+    return {
+        self.topLeft:getX(),
+        self.topLeft:getY(),
+        self:getWidth(),
+        self:getHeight()
+    }
+end
+
+-- Don't like this function, rewrite it to just centre a copy
+--function Rect:centredIn(rect2)
+    --return Vec(
+        --(rect2:getWidth()  - self:getWidth())  / 2,
+        --(rect2:getHeight() - self:getHeight()) / 2
+    --)
+--end
+
+function Rect:centreIn(rect2)
+    local offset = (rect2:getDiagonalVec() - self:getDiagonalVec()) / 2
+    self:translate(-self.topLeft)
+    self:translate(offset + rect2.topLeft)
+end
+
 function Rect:translate(vec)
     self.topLeft = self.topLeft + vec
     self.bottomRight = self.bottomRight + vec
@@ -33,7 +60,7 @@ end
 function Rect:translated(vec)
     local ret = self:deepcopy()
     ret.topLeft = ret.topLeft + vec
-    ret.bottomight = ret.bottomight + vec
+    ret.bottomRight = ret.bottomRight + vec
     return ret
 end
 

@@ -1,8 +1,8 @@
 require('scaler')
 local geo = require('geometry')
-local Class = require('class')
-local module = {}
-local Level = Class:extends()
+-- The Level rect is the drawable one. It is backed by a grid, which is simply
+-- an XY grid size in a vector
+local Level = geo.Rect:extends()
 
 function sizeRange(difficulty)
     local min = 10
@@ -13,77 +13,84 @@ function sizeRange(difficulty)
     return {min, max}
 end
 
+function getAnImage()
+    local imageList = love.filesystem.getDirectoryItems('img/backgrounds')
+    return love.graphics.newImage(
+        'img/backgrounds/' .. imageList[love.math.random(#imageList)]
+    )
+end
+
 function Level:new(params)
     self.difficulty = params.difficulty or 1
 
-    assert(params.windowRect, "Must pass windowRect to Level()")
+    assert(params.maxSize, "Must pass maxSize to Level()")
 
     self.fadeInAlpha = 0
+
     local sizeRange = sizeRange(self.difficulty)
     local h = params.height or love.math.random(unpack(sizeRange))
     local w = params.width or love.math.random(unpack(sizeRange))
-    self.rect = geo.Rect(w, h)
 
-    self.pixel = geo.Vec(
-        love.math.random(0, self.rect:getWidth() - 1),
-        love.math.random(0, self.rect:getHeight() - 1)
-    )
+    self.pixel = geo.Vec(0,0)
+        --love.math.random(0, w - 1),
+        --love.math.random(0, h - 1)
+    --)
 
-    self.scale = scaleFactor(self.rect, params.windowRect)
-    local drawRect = self.rect:scaled(self.scale)
-    self.offset = centreRect(drawRect, params.windowRect)
-    drawRect:translate(self.offset)
-    self.drawRect = drawRect
+    local grid = geo.Vec(w, h)
+    local scale = scaleFactor(grid, params.maxSize)
+    Level.super.new(self, w * scale, h * scale)
+    self:centreIn(geo.Rect(params.maxSize:getX(), params.maxSize:getY()))
+    self.grid = grid
 
-    local imageList = love.filesystem.getDirectoryItems('img/backgrounds')
-    local image = love.graphics.newImage(
-        'img/backgrounds/' .. imageList[love.math.random(#imageList)]
-    )
-    local imageRect = geo.Rect(image:getPixelWidth(), image:getPixelHeight())
-    local imageScale = 1/scaleFactor(self.rect, imageRect)
-    imageRect:scale(imageScale)
+    -- Get an image, then shrink it down to our grid size. That's imageScale
+    local image = getAnImage()
+    local imageVec = geo.Vec(image:getPixelWidth(), image:getPixelHeight())
+    local imageScale = 1/scaleFactor(grid, imageVec)
 
-    local canvas = love.graphics.newCanvas(
-        self.rect:getWidth(), self.rect:getHeight()
-    )
-    -- this will give us the image position, i.e. a negative number.
-    local canvasOffset = centreRect(
-        imageRect, self.rect
-    )
-    local canvasScale = scaleFactor(self.rect, self.drawRect)
+    -- When scaled the image will be bigger in one direction. Canvas is the
+    -- right pixel size; imageOffset will be negative, so the canvas chops a
+    -- window out of the middle of the image
+    local canvas = love.graphics.newCanvas( grid:getX(), grid:getY() )
+    local imageOffset = (grid - (imageVec * imageScale)) / 2
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.setCanvas(canvas)
-    love.graphics.draw(image, canvasOffset:getX(), canvasOffset:getY(), 0, imageScale)
+    love.graphics.draw(image, imageOffset:getX(), imageOffset:getY(), 0, imageScale)
 
+    -- bigCanvas is the drawable one. It's the same size as Level, so we can use
+    -- the existing scale to go from small canvas -> big canvas
     local bigCanvas = love.graphics.newCanvas(
-        drawRect:getWidth(), drawRect:getHeight()
+        self:getWidth(), self:getHeight()
     )
-    local canvasScale = scaleFactor(self.rect, self.drawRect)
 
     love.graphics.setCanvas(bigCanvas)
     canvas:setFilter('nearest', 'nearest')
-    love.graphics.draw(canvas, 0, 0, 0, canvasScale)
+    love.graphics.draw(canvas, 0, 0, 0, scale)
     love.graphics.setCanvas()
 
     self.image = bigCanvas
+
+    print(self:toString())
 end
 
 function Level:pixelContains(vec)
-    return self:getPixelRect(self.pixel):contains(vec)
+    local pointedAt = self:getGridPixelContaining(vec)
+    if not pointedAt then return false end
+    return pointedAt:equals(self.pixel)
 end
 
 function Level:getGridPixelContaining(vec)
-    local x = vec:getX() - self.offset:getX()
-    local y = vec:getY() - self.offset:getY()
+    local x = vec:getX() - self.topLeft:getX()
+    local y = vec:getY() - self.topLeft:getY()
+    local scale = scaleFactor(self.grid, self:getDiagonalVec())
 
-    local gridX = math.floor(x / self.scale)
-    local gridY = math.floor(y / self.scale)
+    local gridX = math.floor(x / scale)
+    local gridY = math.floor(y / scale)
 
     if gridX < 0
     or gridY < 0
-    or gridX >= self.rect:getWidth()
-    or gridY >= self.rect:getHeight()
+    or gridX >= self.grid:getX()
+    or gridY >= self.grid:getY()
         then
             return nil
         end
@@ -91,34 +98,21 @@ function Level:getGridPixelContaining(vec)
     return geo.Vec(gridX, gridY)
 end
 
-function Level:getDrawBox(rect)
-    return {
-        rect.topLeft:getX(),
-        rect.topLeft:getY(),
-        rect:getWidth(),
-        rect:getHeight()
-    }
-end
-
-function Level:getGridDrawBox()
-    return self:getDrawBox(self.drawRect)
-end
-
 function Level:getPixelDrawBox(px)
     if px == nil then
         px = self.pixel
     end
 
-    return self:getDrawBox(self:getPixelRect(px))
+    return self:getPixelRect(px):asXYHW()
 end
 
 function Level:getPixelRect(px)
-    local drawPixel = px * self.scale
+    local scale = scaleFactor(self.grid, self:getDiagonalVec())
+    local drawPixel = px * scale
     drawPixel = geo.Rect(
         drawPixel:getX(), drawPixel:getY(),
-        drawPixel:getX() + self.scale, drawPixel:getY() + self.scale
+        drawPixel:getX() + scale, drawPixel:getY() + scale
     )
-    drawPixel:translate(self.offset)
     return drawPixel
 end
 
@@ -168,16 +162,16 @@ function Level:fadeToColour(alphaStep)
 end
 
 function Level:draw()
-    local drawBox = self:getGridDrawBox()
-
+    local canvas = love.graphics.newCanvas(unpack(self:getDiagonalVec():getXY()))
+    love.graphics.setCanvas(canvas)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(self.image, drawBox[1], drawBox[2])
+    love.graphics.draw(self.image, 0, 0)
 
     if self.fadeInAlpha then
         love.graphics.setColor(1,1,1,self.fadeInAlpha)
         love.graphics.rectangle(
             "fill",
-            unpack(drawBox)
+            0, 0, self:getWidth(), self:getHeight()
         )
     end
 
@@ -199,13 +193,17 @@ function Level:draw()
             unpack( self:getPixelDrawBox(pointedAt) )
         )
     end
+
+    love.graphics.setCanvas()
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(canvas, self.topLeft:getX(), self.topLeft:getY())
 end
 
 function Level:toString()
     return (
-" Rect:   " .. tostring(self.rect) .. "\n" ..
-" Pixel:  " .. tostring(self.pixel) .. "\n" ..
-"(Offset: " .. tostring(self.offset) .. " Scale: " .. tostring(self.scale) .. ")"
+"Rect:   " .. tostring(self.grid) .. "\n" ..
+"Pixel:  " .. tostring(self.pixel) .. "\n" ..
+"Draw:   " .. Level.super.toString(self)
 )
 end
 

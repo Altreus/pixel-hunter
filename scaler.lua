@@ -1,21 +1,20 @@
 local geo = require('geometry')
 
--- How much bigger is rect2 than rect1?
--- IOW, how do we scale rect1 up so that it meets rect2?
--- They don't have to have the same aspect ratio - we return the smallest scale
--- factor that will make either dimension the same.
-function scaleFactor(rect1, rect2)
-    local widthFactor = rect2:getWidth() / rect1:getWidth()
-    local heightFactor = rect2:getHeight() / rect1:getHeight()
+-- Returns either the X ratio or the Y ratio of the two vectors, whichever is
+-- smaller. Use this to determine how much to scale a rect in order to match
+-- another one, by passing their diagonals as vectors.
+function scaleFactor(vec1, vec2)
+    local widthFactor = vec2:getX() / vec1:getX()
+    local heightFactor = vec2:getY() / vec1:getY()
 
     return math.min(widthFactor, heightFactor)
 end
 
--- Returns coordinates of rect1 centred in rect2, relative to rect2
-function centreRect(rect1, rect2)
+-- Returns coordinates of vec1 centred in vec2, relative to rect2
+function centreRect(vec1, vec2)
     return geo.Vec(
-        (rect2:getWidth()  - rect1:getWidth())  / 2,
-        (rect2:getHeight() - rect1:getHeight()) / 2
+        (vec2:getX() - vec1:getX())  / 2,
+        (vec2:getY() - vec1:getY()) / 2
     )
 end
 
