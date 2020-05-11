@@ -23,8 +23,7 @@ function love.load()
 end
 
 function love.update(dt)
-    local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
-    local cursor = love.mouse.getSystemCursor('hand')
+    love.mouse.setCursor()
     if game.level then
         game.level:update(dt)
         game.hud:update(dt)
@@ -32,14 +31,11 @@ function love.update(dt)
         if game.hud:timeUp() then
             game.level = nil
             game.hud = nil
-        end
-    else
-        if startButton:contains(mousePoint) or bgHelpText:contains(mousePoint) then
-            love.mouse.setCursor(cursor)
-        else
-            love.mouse.setCursor()
+            startButton:show()
         end
     end
+    startButton:update(dt)
+    bgHelpText:update(dt)
 end
 
 function love.mousereleased(x,y,button)
@@ -54,19 +50,16 @@ function love.mousereleased(x,y,button)
     local mousePoint = geo.Vec(x,y)
 
     if game.level then
-        game.level:onClick()
+        game.level:onMouseUp(mousePoint)
         if game.level:isBeaten() then
-            game.level = Level{
-                maxSize = windowRect:getDiagonalVec(),
-                difficulty = game.level.difficulty + 1
-            }
-            game.level:translate(windowRect.topLeft)
-            game.hud.timer = 30
+            game.hud:pause()
         end
     elseif startButton:contains(mousePoint) then
         game.hud = hud
-        game.level = Level{maxSize = windowRect:getDiagonalVec()}
+        game.level = Level{rect = windowRect:getDiagonalVec():getXY()}
         game.level:translate(windowRect.topLeft)
+        startButton:hide()
+        bgHelpText:hide()
     elseif bgHelpText:contains(mousePoint) then
         local dir = love.filesystem.getSaveDirectory() .. '/img/backgrounds'
 
@@ -81,8 +74,8 @@ function love.draw()
     if game.level then
         game.hud:draw()
         game.level:draw()
-    else
-        startButton:draw()
-        bgHelpText:draw()
     end
+
+    startButton:draw()
+    bgHelpText:draw()
 end
