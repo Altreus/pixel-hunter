@@ -29,4 +29,6 @@ function Drawable:draw()
     self:doDraw()
 end
 
+function Drawable:handleGainedParent() end
+
 return Drawable
