@@ -15,13 +15,24 @@ function HUD:new()
         love.graphics.getHeight()
     )
     self:update(0)
+    self.isPaused = false
 end
 
 function HUD:timeUp()
     return self.timer <= 0
 end
 
+function HUD:pause()
+    self.isPaused = true
+end
+
+function HUD:unpause()
+    self.isPaused = false
+end
+
 function HUD:update(dt)
+    if self.isPaused then return end
+
     self.timer = self.timer - dt
     local seconds = math.ceil(self.timer)
     local minutes = math.floor(seconds / 60)
