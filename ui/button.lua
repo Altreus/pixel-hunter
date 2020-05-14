@@ -12,13 +12,8 @@ function Button:new(image, x1, y1, x2, y2)
     self.hidden = false
 end
 
-function Button:update(dt)
-    local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
-    local cursor = love.mouse.getSystemCursor('hand')
-
-    if self:contains(mousePoint) then
-        love.mouse.setCursor(cursor)
-    end
+function Button:onMouseOver()
+    love.mouse.setCursor(cursor)
 end
 
 function Button:doDraw()
