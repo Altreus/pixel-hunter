@@ -1,4 +1,3 @@
-require 'dumper'
 local geo = require 'geometry'
 local Drawable = require 'ui.drawable'
 local Pane = Drawable:extends()
