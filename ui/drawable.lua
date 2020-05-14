@@ -2,7 +2,8 @@ local geo = require "geometry"
 
 local Drawable = geo.Rect:extends()
 
-function Drawable:new()
+function Drawable:new(...)
+    Drawable.super.new(self,unpack({...}))
     self.hidden = false
 end
 
