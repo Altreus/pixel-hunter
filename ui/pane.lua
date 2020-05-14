@@ -7,6 +7,7 @@ function Pane:new(...)
     local arg={...}
     Pane.super.new(self, unpack(arg))
     self.items = {}
+    self.mouseOvers = {}
 end
 
 function Pane:addItem(item, name)
@@ -59,6 +60,16 @@ function Pane:onMouseUp(mousePoint)
 end
 
 function Pane:update(dt)
+    local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
+    local mousePointRel = mousePoint - self:getScreenOffset()
+
+    for item, k in pairs(self.items) do
+        if k:contains(mousePointRel) then
+            self.mouseOvers[item] = mousePoint
+            k:onMouseOver(mousePointRel)
+        end
+    end
+
     for _, k in pairs(self.items) do
         k:update(dt)
     end
