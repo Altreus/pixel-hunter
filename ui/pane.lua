@@ -1,6 +1,7 @@
 require 'dumper'
 local geo = require 'geometry'
-local Pane = geo.Rect:extends()
+local Drawable = require 'ui.drawable'
+local Pane = Drawable:extends()
 
 function Pane:new(...)
     local arg={...}
@@ -46,10 +47,9 @@ function Pane:update(dt)
     end
 end
 
-function Pane:draw()
+function Pane:doDraw()
     local canvas = love.graphics.newCanvas(unpack(self:getDiagonalVec():getXY()))
     love.graphics.setCanvas(canvas)
-    love.graphics.setColor(1,1,1,1)
 
     for _, k in pairs(self.items) do
         k:draw()

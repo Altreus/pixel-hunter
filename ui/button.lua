@@ -1,6 +1,6 @@
-local geo = require "geometry"
+local Drawable = require "ui.drawable"
 
-local Button = geo.Rect:extends()
+local Button = Drawable:extends()
 
 function Button:new(image, x1, y1, x2, y2)
     x1 = x1 or 0
@@ -21,9 +21,7 @@ function Button:update(dt)
     end
 end
 
-function Button:draw()
-    if self.hidden then return end
-
+function Button:doDraw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(self.image, self.topLeft:getX(), self.topLeft:getY())
 end
