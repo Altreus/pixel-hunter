@@ -19,6 +19,23 @@ function Pane:removeItem(name)
     self.items[name] = nil
 end
 
+function Pane:fitToSize()
+    local maxH = 0
+    local maxW = 0
+
+    for _, i in pairs(self.items) do
+        maxH = math.max(maxH, i.bottomRight:getY())
+        maxW = math.max(maxW, i.bottomRight:getX())
+    end
+
+    if maxH == 0 or maxW == 0 then
+        error("Could not determine size of pane. Is it empty?")
+    end
+
+    self.bottomRight:setX(self.topLeft:getX() + maxW)
+    self.bottomRight:setY(self.topLeft:getY() + maxH)
+end
+
 function Pane:getScreenOffset()
     local offset = self.topLeft:deepcopy(self.topLeft)
 
