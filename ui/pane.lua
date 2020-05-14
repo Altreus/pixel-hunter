@@ -30,13 +30,13 @@ end
 
 function Pane:onMouseDown(mousePoint)
     for _, k in pairs(self.items) do
-        k:onMouseDown(mousePoint)
+        k:onMouseDown(mousePoint - self:getScreenOffset())
     end
 end
 
 function Pane:onMouseUp(mousePoint)
     for _, k in pairs(self.items) do
-        k:onMouseUp(mousePoint)
+        k:onMouseUp(mousePoint - self:getScreenOffset())
     end
 end
 
