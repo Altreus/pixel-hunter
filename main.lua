@@ -1,18 +1,25 @@
 local geo = require 'geometry'
 local Level = require 'level'
+local Pane = require 'ui.pane'
 local Button = require 'ui.button'
 local HUD = require 'hud'
 require 'scaler'
 
 function love.load()
-    game = {}
+    game = {
+        score = 0
+    }
     local windowRect = geo.Rect(
         love.graphics.getWidth(),
         love.graphics.getHeight()
     )
 
+    local menu = Pane(windowRect:getWidth(), windowRect:getHeight())
     startButton = Button(love.graphics.newImage('img/start-button.png'))
-    startButton:centreIn(windowRect)
+    menu:addItem(startButton, 'start')
+    startButton:centreIn(menu)
+    game.menu = menu
+
     bgHelpText = Button(love.graphics.newText(
         love.graphics.getFont(),
         "Add custom backgrounds to "
@@ -34,8 +41,7 @@ function love.update(dt)
             startButton:show()
         end
     end
-    startButton:update(dt)
-    bgHelpText:update(dt)
+    game.menu:update(dt)
 end
 
 function love.mousereleased(x,y,button)

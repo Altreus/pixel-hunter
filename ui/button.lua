@@ -12,7 +12,11 @@ function Button:new(image, x1, y1, x2, y2)
     self.hidden = false
 end
 
-function Button:onMouseOver()
+function Button:onMouseOver(mousePoint)
+    if not self:isVisible() then return end
+
+    local cursor = love.mouse.getSystemCursor('hand')
+
     love.mouse.setCursor(cursor)
 end
 

@@ -1,7 +1,8 @@
 require 'scaler'
 local geo = require 'geometry'
+local Drawable = require 'ui.drawable'
 
-local Grid = geo.Rect:extends()
+local Grid = Drawable:extends()
 
 --------------------------
 -- Love methods
