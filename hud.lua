@@ -15,6 +15,7 @@ function HUD:new()
         love.graphics.getHeight()
     )
     self:update(0)
+    self.level = 1
     self.isPaused = false
 end
 
@@ -58,6 +59,13 @@ function HUD:draw()
         love.graphics.setColor(1,1,1)
     end
     love.graphics.draw(self.timerText, drawBox[1]+10, 10)
+
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.print(
+        "Level " .. self.level,
+        10,
+        drawBox[1] + 10 + self.timerText:getHeight() + 10
+    )
 end
 
 return HUD
