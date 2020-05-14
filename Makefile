@@ -1,12 +1,16 @@
 .PHONY: dist win64 linux clean
 
+GAMEFILES = $(shell git ls-files *.lua)
+UI = $(shell git ls-files ui)
+RESOURCES = $(shell git ls-files img font)
+
 clean:
 	- $(RM) dist/pixel-hunter.love
 	- $(RM) pixel-hunter.love
 	- $(RM) dist/pixel-hunter-*.zip
 
 pixel-hunter.love:
-	zip -9 -r pixel-hunter.love main.lua class.lua geometry.lua level.lua scaler.lua vectorial2.lua conf.lua ui img
+	zip -9 -r pixel-hunter.love $(GAMEFILES) $(UI) $(RESOURCES)
 
 dist: pixel-hunter.love
 	mv pixel-hunter.love dist
