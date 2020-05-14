@@ -31,4 +31,14 @@ end
 
 function Drawable:handleGainedParent() end
 
+function Drawable:update() end
+
+function Drawable:onMouseOver() end
+
+function Drawable:onMouseOut() end
+
+function Drawable:onMouseDown() end
+
+function Drawable:onMouseUp() end
+
 return Drawable
