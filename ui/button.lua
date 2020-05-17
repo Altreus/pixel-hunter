@@ -14,8 +14,6 @@ function Button:new(image, x1, y1, x2, y2)
 end
 
 function Button:onMouseOut(mousePoint)
-    if not self:isVisible() then return end
-
     setCursor()
 end
 
@@ -24,6 +22,12 @@ function Button:onMouseOver(mousePoint)
 
     local cursor = love.mouse.getSystemCursor('hand')
     setCursor(cursor)
+end
+
+function Button:contains(vec)
+    if not self:isVisible() then return false end
+
+    return Button.super.contains(self,vec)
 end
 
 function Button:doDraw()
