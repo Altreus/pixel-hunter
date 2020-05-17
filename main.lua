@@ -1,8 +1,8 @@
 local geo = require 'geometry'
+local ui = require 'ui'
 local Level = require 'level'
-local Pane = require 'ui.pane'
-local Button = require 'ui.button'
 local HUD = require 'hud'
+
 require 'scaler'
 
 function love.load()
@@ -14,13 +14,13 @@ function love.load()
         love.graphics.getHeight()
     )
 
-    local menu = Pane(windowRect:getWidth(), windowRect:getHeight())
-    startButton = Button(love.graphics.newImage('img/start-button.png'))
+    local menu = ui.Pane(windowRect:getWidth(), windowRect:getHeight())
+    startButton = ui.Button(love.graphics.newImage('img/start-button.png'))
     menu:addItem(startButton, 'start')
     startButton:centreIn(menu)
     game.menu = menu
 
-    bgHelpText = Button(love.graphics.newText(
+    bgHelpText = ui.Button(love.graphics.newText(
         love.graphics.getFont(),
         "Add custom backgrounds to "
         .. love.filesystem.getSaveDirectory()
@@ -30,7 +30,6 @@ function love.load()
 end
 
 function love.update(dt)
-    love.mouse.setCursor()
     if game.level then
         game.level:update(dt)
         game.hud:update(dt)
@@ -42,6 +41,7 @@ function love.update(dt)
         end
     end
     game.menu:update(dt)
+    love.mouse.setCursor(__cursor)
 end
 
 function love.mousereleased(x,y,button)

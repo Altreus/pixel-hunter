@@ -1,4 +1,5 @@
 local geo = require 'geometry'
+local Button = require 'ui.button'
 local Drawable = require 'ui.drawable'
 local Pane = Drawable:extends()
 
@@ -63,9 +64,14 @@ function Pane:update(dt)
     local mousePointRel = mousePoint - self:getScreenOffset()
 
     for item, k in pairs(self.items) do
-        if k:contains(mousePointRel) then
+        if k:contains(mousePointRel) and not self.mouseOvers[item] then
             self.mouseOvers[item] = mousePoint
             k:onMouseOver(mousePointRel)
+        end
+
+        if not k:contains(mousePoint) and self.mouseOvers[item] then
+            k:onMouseOut(mousePointRel)
+            self.mouseOvers[item] = nil
         end
     end
 

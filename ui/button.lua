@@ -1,3 +1,4 @@
+local setCursor = require 'ui.cursor'
 local Drawable = require "ui.drawable"
 
 local Button = Drawable:extends()
@@ -12,12 +13,17 @@ function Button:new(image, x1, y1, x2, y2)
     self.hidden = false
 end
 
+function Button:onMouseOut(mousePoint)
+    if not self:isVisible() then return end
+
+    setCursor()
+end
+
 function Button:onMouseOver(mousePoint)
     if not self:isVisible() then return end
 
     local cursor = love.mouse.getSystemCursor('hand')
-
-    love.mouse.setCursor(cursor)
+    setCursor(cursor)
 end
 
 function Button:doDraw()
