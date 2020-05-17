@@ -84,15 +84,15 @@ function Pane:update(dt)
     end
 end
 
-function Pane:doDraw()
+function Pane:doDraw(parentCanvas)
     local canvas = love.graphics.newCanvas(unpack(self:getDiagonalVec():getXY()))
     love.graphics.setCanvas(canvas)
 
-    for _, k in pairs(self.items) do
+    for item, k in pairs(self.items) do
         k:draw()
     end
 
-    love.graphics.setCanvas()
+    love.graphics.setCanvas(parentCanvas)
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(canvas, self.topLeft:getX(), self.topLeft:getY())
 end
