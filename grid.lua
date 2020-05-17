@@ -1,8 +1,9 @@
 require 'scaler'
 local geo = require 'geometry'
 local Drawable = require 'ui.drawable'
+local ui = require 'ui'
 
-local Grid = Drawable:extends()
+local Grid = ui.Pane:extends()
 
 --------------------------
 -- Love methods
@@ -23,26 +24,35 @@ function Grid:update(dt)
     if self:isBeaten() then return end
 
     local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
-    local cursor = love.mouse.getSystemCursor('hand')
     local alphaStep = 0.8*dt*2
 
     if love.keyboard.isDown('p') then
         self:fadeToWhite(alphaStep)
     elseif self:pixelContains(mousePoint) then
-        love.mouse.setCursor(cursor)
         self:fadeToWhite(alphaStep)
     else
-        love.mouse.setCursor()
         self:fadeToColour(alphaStep)
     end
 end
 
-function Grid:draw()
+function Grid:onMouseUp(mousePoint)
+    if self:pixelContains(mousePoint) then
+        self.beaten = true
+        love.mouse.setCursor()
+    end
+end
+
+--------------------------
+-- UI methods
+--------------------------
+
+function Grid:doDraw()
     local outerCanvas = love.graphics.getCanvas()
     local canvas = love.graphics.newCanvas(unpack(self:getDiagonalVec():getXY()))
     love.graphics.setCanvas(canvas)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(self.image, 0, 0)
+
+    Grid.super.doDraw(self, canvas)
 
     if self:isBeaten() then
         love.graphics.setColor(1,1,1,self.fadeInAlpha)
@@ -89,24 +99,12 @@ function Grid:draw()
     love.graphics.draw(canvas, unpack(self.topLeft:getXY()))
 end
 
-function Grid:onMousedown() end
-
-function Grid:onMouseUp(mousePoint)
-    if self:pixelContains(mousePoint) then
-        self.beaten = true
-        love.mouse.setCursor()
-    end
-end
-
---------------------------
--- UI methods
---------------------------
-
 function Grid:handleGainedParent()
     print(self.parent:toString())
     local scale = scaleFactor(self.gridSize, self.parent:getDiagonalVec())
     self.bottomRight = self.bottomRight * scale
     self:centreIn(self.parent)
+
     -- (We can't do this until we know how big the parent is!)
     -- Get an image, then shrink it down to our grid size. That's imageScale
     local image = getAnImage()
@@ -134,7 +132,8 @@ function Grid:handleGainedParent()
     love.graphics.draw(canvas, 0, 0, 0, scale)
     love.graphics.setCanvas()
 
-    self.image = bigCanvas
+    self:addItem(ui.Image(bigCanvas), 'image')
+    self:addItem(ui.Button(love.graphics.newCanvas(scale,scale)), 'pixel')
 end
 
 --------------------------
