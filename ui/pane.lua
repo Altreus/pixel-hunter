@@ -20,6 +20,10 @@ function Pane:removeItem(name)
     self.items[name] = nil
 end
 
+function Pane:getItem(name)
+    return self.items[name]
+end
+
 function Pane:fitToSize()
     local maxH = 0
     local maxW = 0
