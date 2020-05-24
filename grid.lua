@@ -201,17 +201,4 @@ function Grid:getPixelRect(px)
     return drawPixel
 end
 
-function Grid:toString()
-    return (
-"Rect:   " .. tostring(self.gridSize) .. "\n" ..
-"Pixel:  " .. tostring(self.pixel) .. "\n" ..
-"Draw:   " .. Level.super.toString(self)
-)
-end
-
-function Grid.__tostring(level)
-    return level:toString()
-end
-
-
 return Grid
