@@ -3,11 +3,15 @@ local Button = require 'ui.button'
 local Drawable = require 'ui.drawable'
 local Pane = Drawable:extends()
 
+__paneno__ = 1
 function Pane:new(...)
     local arg={...}
     Pane.super.new(self, unpack(arg))
     self.items = {}
     self.mouseOvers = {}
+    self.__name__ = "Pane " .. __paneno__
+    self.__colour__ = { love.math.random(), love.math.random(), love.math.random(), 1 }
+    __paneno__ = __paneno__ + 1
 end
 
 function Pane:addItem(item, name)
@@ -95,6 +99,18 @@ function Pane:doDraw(parentCanvas)
     love.graphics.setCanvas(parentCanvas)
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(canvas, self.topLeft:getX(), self.topLeft:getY())
+
+    if __DEBUG__ then 
+        love.graphics.setColor(unpack(self.__colour__))
+        love.graphics.rectangle('line', self.topLeft:getX(), self.topLeft:getY(), self:getWidth(), self:getHeight())
+        love.graphics.print(self.__name__, self.topLeft:getX() + 5, self.topLeft:getY() + 5)
+
+        local x = 12
+        for item, _ in pairs(self.items) do
+            love.graphics.print(item, self.topLeft:getX() + 5, self.topLeft:getY() + 5 + x)
+            x = x + 12
+        end
+    end
 end
 
 return Pane
