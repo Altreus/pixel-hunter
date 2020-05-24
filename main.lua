@@ -44,6 +44,12 @@ function love.update(dt)
     love.mouse.setCursor(__cursor)
 end
 
+function love.keyreleased(key)
+    if key == 'd' then
+        __DEBUG__ = not __DEBUG__
+    end
+end
+
 function love.mousereleased(x,y,button)
     if button ~= 1 then return end
 
