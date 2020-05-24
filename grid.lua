@@ -95,7 +95,7 @@ function Grid:doDraw()
 end
 
 function Grid:handleGainedParent()
-    print(self.parent:toString())
+    local parentCanvas = love.graphics.getCanvas()
     local scale = scaleFactor(self.gridSize, self.parent:getDiagonalVec())
     self.bottomRight = self.bottomRight * scale
     self:centreIn(self.parent)
@@ -125,7 +125,7 @@ function Grid:handleGainedParent()
     love.graphics.setCanvas(bigCanvas)
     canvas:setFilter('nearest', 'nearest')
     love.graphics.draw(canvas, 0, 0, 0, scale)
-    love.graphics.setCanvas()
+    love.graphics.setCanvas(parentCanvas)
 
     self:addItem(ui.Image(bigCanvas), 'image')
     self:addItem(ui.Button(love.graphics.newCanvas(scale,scale)), 'pixel')
