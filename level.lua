@@ -35,6 +35,8 @@ function Level:new(params)
 
     self.difficulty = params.difficulty or 1
 
+    self.__name__ = "Level"
+
     local grid = makeGrid(self.difficulty)
 
     if params.height then

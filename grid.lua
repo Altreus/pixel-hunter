@@ -17,7 +17,7 @@ function Grid:new(gridSize)
         love.math.random(0, gridSize:getY() - 1)
     )
     self.fadeInAlpha = 0
-
+    self.__name__ = "Grid"
 end
 
 function Grid:update(dt)
