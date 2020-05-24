@@ -48,11 +48,8 @@ end
 
 function Grid:doDraw()
     local outerCanvas = love.graphics.getCanvas()
-    local canvas = love.graphics.newCanvas(unpack(self:getDiagonalVec():getXY()))
-    love.graphics.setCanvas(canvas)
     love.graphics.setColor(1,1,1,1)
-
-    Grid.super.doDraw(self, canvas)
+    Grid.super.doDraw(self, outerCanvas)
 
     if self:isBeaten() then
         love.graphics.setColor(1,1,1,self.fadeInAlpha)
@@ -95,8 +92,6 @@ function Grid:doDraw()
     end
 
     love.graphics.setColor(1,1,1,1)
-    love.graphics.setCanvas(outerCanvas)
-    love.graphics.draw(canvas, unpack(self.topLeft:getXY()))
 end
 
 function Grid:handleGainedParent()
