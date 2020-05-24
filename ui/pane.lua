@@ -17,10 +17,12 @@ end
 function Pane:addItem(item, name)
     item.parent = self
     self.items[name] = item
+    item.__localname__ = name
     item:handleGainedParent()
 end
 
 function Pane:removeItem(name)
+    self.items[name].__localname__ = nil
     self.items[name] = nil
 end
 
