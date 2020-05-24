@@ -3,25 +3,28 @@ local Image = require 'ui.image'
 local Button = Image:extends()
 
 function Button:onMouseOut(mousePoint)
+    __D("Mouse out " .. self.__localname__)
     setCursor()
 end
 
 function Button:onMouseOver(mousePoint)
-    if not self:isVisible() then return end
+    __D("Mouse over " .. self.__localname__)
+    if not self:isVisible() then
+        __D("... but invisible")
+        return
+    end
 
     local cursor = love.mouse.getSystemCursor('hand')
     setCursor(cursor)
 end
 
 function Button:contains(vec)
-    if not self:isVisible() then return false end
+    if not self:isVisible() then
+        __D("Invisible button!" .. self.__localname__)
+        return false
+    end
 
     return Button.super.contains(self,vec)
-end
-
-function Button:contains(point)
-    if self.hidden then return false end
-    return self.super.contains(self, point)
 end
 
 return Button

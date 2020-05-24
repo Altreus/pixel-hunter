@@ -3,6 +3,10 @@ local ui = require 'ui'
 local Level = require 'level'
 local HUD = require 'hud'
 
+function __D(x)
+    if __DEBUG__ then print(x) end
+end
+
 require 'scaler'
 
 function love.load()
