@@ -90,7 +90,8 @@ function Pane:update(dt)
     end
 end
 
-function Pane:doDraw(parentCanvas)
+function Pane:doDraw()
+    local parentCanvas = love.graphics.getCanvas()
     local canvas = love.graphics.newCanvas(unpack(self:getDiagonalVec():getXY()))
     love.graphics.setCanvas(canvas)
 
@@ -102,7 +103,7 @@ function Pane:doDraw(parentCanvas)
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(canvas, self.topLeft:getX(), self.topLeft:getY())
 
-    if __DEBUG__ then 
+    if __DEBUG__ then
         love.graphics.setColor(unpack(self.__colour__))
         love.graphics.rectangle('line', self.topLeft:getX(), self.topLeft:getY(), self:getWidth(), self:getHeight())
         love.graphics.print(self.__name__, self.topLeft:getX() + 5, self.topLeft:getY() + 5)
