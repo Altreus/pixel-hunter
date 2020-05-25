@@ -31,10 +31,6 @@ function Grid:update(dt)
 
     if love.keyboard.isDown('p') then
         self:fadeToWhite(alphaStep)
-    elseif self:pixelContains(mousePoint) then
-        self:fadeToWhite(alphaStep)
-    else
-        self:fadeToColour(alphaStep)
     end
 end
 
@@ -66,22 +62,6 @@ function Grid:doDraw()
             unpack(self:getPixelDrawBox())
         )
     else
-        if self.fadeInAlpha then
-            love.graphics.setColor(1,1,1,self.fadeInAlpha)
-            love.graphics.rectangle(
-                "fill",
-                0, 0, self:getWidth(), self:getHeight()
-            )
-        end
-
-        local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
-        if self:pixelContains(mousePoint) or love.keyboard.isDown('p') then
-            love.graphics.setColor(0,0,0,1)
-            love.graphics.rectangle(
-                "fill",
-                unpack(self:getPixelDrawBox())
-            )
-        end
     end
 
 
@@ -154,50 +134,6 @@ end
 
 function Grid:isBeaten()
     return self.beaten
-end
-
-function Grid:pixelContains(mousePoint)
-    local pointedAt = self:getGridPixelContaining(mousePoint)
-    if not pointedAt then return false end
-    return pointedAt:equals(self.pixel)
-end
-
-function Grid:getGridPixelContaining(vec)
-    vec = vec - self.parent:getScreenOffset()
-    local x = vec:getX() - self.topLeft:getX()
-    local y = vec:getY() - self.topLeft:getY()
-    local scale = scaleFactor(self.gridSize, self:getDiagonalVec())
-
-    local gridX = math.floor(x / scale)
-    local gridY = math.floor(y / scale)
-
-    if gridX < 0
-    or gridY < 0
-    or gridX >= self.gridSize:getX()
-    or gridY >= self.gridSize:getY()
-        then
-            return nil
-        end
-
-    return geo.Vec(gridX, gridY)
-end
-
-function Grid:getPixelDrawBox(px)
-    if px == nil then
-        px = self.pixel
-    end
-
-    return self:getPixelRect(px):asXYHW()
-end
-
-function Grid:getPixelRect(px)
-    local scale = scaleFactor(self.gridSize, self:getDiagonalVec())
-    local drawPixel = px * scale
-    drawPixel = geo.Rect(
-        drawPixel:getX(), drawPixel:getY(),
-        drawPixel:getX() + scale, drawPixel:getY() + scale
-    )
-    return drawPixel
 end
 
 return Grid
