@@ -64,9 +64,10 @@ function Grid:handleGainedParent()
     local canvas = love.graphics.newCanvas(self:getWidth(), self:getHeight())
     local imageOffset = (self.gridSize - (imageVec * imageScale)) / 2
 
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.setCanvas(canvas)
-    love.graphics.draw(image, imageOffset:getX(), imageOffset:getY(), 0, imageScale)
+    canvas:renderTo( function()
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(image, imageOffset:getX(), imageOffset:getY(), 0, imageScale)
+    end)
 
     -- bigCanvas is the drawable one. It's the same size as Level, so we can use
     -- the existing scale to go from small canvas -> big canvas
@@ -74,10 +75,10 @@ function Grid:handleGainedParent()
         self:getWidth(), self:getHeight()
     )
 
-    love.graphics.setCanvas(bigCanvas)
-    canvas:setFilter('nearest', 'nearest')
-    love.graphics.draw(canvas, 0, 0, 0, scale)
-    love.graphics.setCanvas(parentCanvas)
+    bigCanvas:renderTo( function()
+        canvas:setFilter('nearest', 'nearest')
+        love.graphics.draw(canvas, 0, 0, 0, scale)
+    end)
 
     self:addItem(ui.Image(bigCanvas), 'image')
     self:addItem(ui.Button(love.graphics.newCanvas(scale,scale)), 'pixel')
