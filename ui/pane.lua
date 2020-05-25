@@ -9,7 +9,6 @@ function Pane:new(...)
     self.items = {}
     self.mouseOvers = {}
     self.__name__ = "Pane " .. __paneno__
-    self.__colour__ = { love.math.random(), love.math.random(), love.math.random(), 1 }
     __paneno__ = __paneno__ + 1
 end
 

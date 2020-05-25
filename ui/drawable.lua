@@ -2,8 +2,13 @@ local geo = require "geometry"
 
 local Drawable = geo.Rect:extends()
 
+__drawableno__ = 1
+
 function Drawable:new(...)
     Drawable.super.new(self,unpack({...}))
+    self.__colour__ = { love.math.random(), love.math.random(), love.math.random(), 1 }
+    self.__name__ = "Drawable " .. __drawableno__
+    __drawableno__ = __drawableno__ + 1
     self.hidden = false
 end
 
