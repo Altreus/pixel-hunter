@@ -24,6 +24,9 @@ function love.load()
     startButton:centreIn(menu)
     game.menu = menu
 
+    startButton.__name__ = 'start button'
+    menu.__name__ = 'main menu'
+
     bgHelpText = ui.Button(love.graphics.newText(
         love.graphics.getFont(),
         "Add custom backgrounds to "
@@ -31,6 +34,7 @@ function love.load()
         .. '/img/backgrounds'
     ))
     bgHelpText:translate(geo.Vec(10,10))
+    bgHelpText.__name__ = 'help text'
 end
 
 function love.update(dt)
@@ -74,7 +78,7 @@ function love.mousereleased(x,y,button)
         game.hud = hud
         game.level = Level{rect = windowRect:getDiagonalVec():getXY()}
         game.level:translate(windowRect.topLeft)
-        startButton:hide()
+        game.menu:hide()
         bgHelpText:hide()
     elseif bgHelpText:contains(mousePoint) then
         local dir = love.filesystem.getSaveDirectory() .. '/img/backgrounds'
@@ -92,6 +96,6 @@ function love.draw()
         game.level:draw()
     end
 
-    startButton:draw()
     bgHelpText:draw()
+    game.menu:draw()
 end
