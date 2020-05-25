@@ -77,7 +77,7 @@ function Pane:update(dt)
             k:onMouseOver(mousePointRel)
         end
 
-        if not k:contains(mousePoint) and self.mouseOvers[item] then
+        if not k:contains(mousePointRel) and self.mouseOvers[item] then
             k:onMouseOut(mousePointRel)
             self.mouseOvers[item] = nil
         end
