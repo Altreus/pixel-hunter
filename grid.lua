@@ -24,6 +24,8 @@ end
 function Grid:update(dt)
     if self:isBeaten() then return end
 
+    Grid.super.update(self,dt)
+
     local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
     local alphaStep = 0.8*dt*2
 
