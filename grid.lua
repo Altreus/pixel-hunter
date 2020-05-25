@@ -48,7 +48,7 @@ end
 function Grid:doDraw()
     local outerCanvas = love.graphics.getCanvas()
     love.graphics.setColor(1,1,1,1)
-    Grid.super.doDraw(self, outerCanvas)
+    Grid.super.doDraw(self)
 
     if self:isBeaten() then
         love.graphics.setColor(1,1,1,self.fadeInAlpha)
