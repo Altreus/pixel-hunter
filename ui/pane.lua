@@ -5,8 +5,7 @@ local Pane = Drawable:extends()
 
 __paneno__ = 1
 function Pane:new(...)
-    local arg={...}
-    Pane.super.new(self, unpack(arg))
+    Pane.super.new(self, unpack({...}))
     self.items = {}
     self.mouseOvers = {}
     self.__name__ = "Pane " .. __paneno__
