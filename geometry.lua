@@ -51,6 +51,10 @@ function Rect:centreIn(rect2)
     self:translate(offset + rect2.topLeft)
 end
 
+function Rect:translateTo(vec)
+    self:translate(vec - self.topLeft)
+end
+
 function Rect:translate(vec)
     self.topLeft = self.topLeft + vec
     self.bottomRight = self.bottomRight + vec

@@ -2,6 +2,7 @@ require 'scaler'
 local geo = require 'geometry'
 local Drawable = require 'ui.drawable'
 local ui = require 'ui'
+local GridDecals = require 'grid-decals'
 
 local Grid = ui.Pane:extends()
 
@@ -79,17 +80,8 @@ function Grid:doDraw()
                 unpack(self:getPixelDrawBox())
             )
         end
-
-        local pointedAt = self:getGridPixelContaining(mousePoint)
-        if pointedAt then
-            love.graphics.setColor(1, .2, .2, 1)
-            love.graphics.setLineWidth(4)
-            love.graphics.rectangle(
-                "line",
-                unpack( self:getPixelDrawBox(pointedAt) )
-            )
-        end
     end
+
 
     love.graphics.setColor(1,1,1,1)
 end
@@ -129,6 +121,8 @@ function Grid:handleGainedParent()
 
     self:addItem(ui.Image(bigCanvas), 'image')
     self:addItem(ui.Button(love.graphics.newCanvas(scale,scale)), 'pixel')
+    self:addItem(GridDecals(self:getWidth(), self:getHeight(), scale), 'decals')
+    self:getItem('decals').__name__ = "Decals"
 end
 
 --------------------------
