@@ -1,41 +1,59 @@
 local ui = require 'ui'
-local GridDecals = ui.Pane:extends()
+local geo = require 'geometry'
+local GridDecals = ui.Image:extends()
 
 -- We know the size of this because we add it to the Grid when the Grid knows
 -- its size
-function GridDecals:new(w,h,pixelSize)
-    GridDecals.super.new(self, w, h)
+function GridDecals:new(w,h,pixelSize,pixelPos)
+    local buf = love.graphics.newCanvas(w,h)
+    GridDecals.super.new(self, buf, 0, 0)
     self.pixelSize = pixelSize
+    self.pixelPos = pixelPos
 
-    local outerCanvas = love.graphics.getCanvas()
-    local background = love.graphics.newCanvas(self:getWidth(), self:getHeight())
-    self:addItem(ui.Image(background), 'background')
-
-    local target = love.graphics.newCanvas(pixelSize, pixelSize)
-    love.graphics.setCanvas(target)
-    love.graphics.setColor(1, .2, .2, 1)
-    love.graphics.setLineWidth(4)
-    love.graphics.rectangle('line', 0, 0, pixelSize, pixelSize)
-    self:addItem(ui.Image(target), 'target')
-
-    local pixel = love.graphics.newCanvas(pixelSize, pixelSize)
-    love.graphics.setCanvas(pixel)
-    love.graphics.setColor(0,0,0,1)
-    love.graphics.rectangle('fill', 0, 0, pixelSize, pixelSize)
-    self:addItem(ui.Image(pixel), 'pixel')
-
-    self:getItem('pixel'):hide()
-    love.graphics.setCanvas(outerCanvas)
+    -- Leave space for the target box to go outside the image itself
+    -- If this goes outside the level itself, the level's canvas will cut it off
+    --self:translate(geo.Vec(-2, 0))
+    --self.bottomRight = self.bottomRight + geo.Vec(4,0)
 end
 
 function GridDecals:update(dt)
     local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
-    local mousePointRel = mousePoint - self:getScreenOffset()
+    local mousePointRel = mousePoint - self.parent:getScreenOffset()
 
-    if not self:contains(mousePointRel) then return end
+    self.buf:renderTo( function()
+        love.graphics.clear()
 
-    local gridPix = self:mousePointToGridCoords(mousePointRel)
-    self:getItem('target'):translateTo(gridPix)
+        -- Always want to clear it - so we can't do this earlier
+        if not self:contains(mousePointRel) then return end
+        local gridPixel = self:mousePointToGridCoords(mousePointRel)
+
+        if self.fadeInAlpha then
+            love.graphics.setColor(1,1,1,self.fadeInAlpha)
+            love.graphics.rectangle(
+                "fill",
+                0, 0, self:getWidth(), self:getHeight()
+            )
+        end
+
+        if gridPixel == self.pixelPos or love.keyboard.isDown('p') then
+            love.graphics.setColor(0,0,0,1)
+            love.graphics.rectangle(
+                "fill",
+                unpack(self:getPixelDrawBox())
+            )
+        end
+
+        love.graphics.setColor(1, .2, .2, 1)
+        love.graphics.setLineWidth(8)
+        love.graphics.rectangle('line', gridPixel:getX(), gridPixel:getY(),
+            self.pixelSize, self.pixelSize)
+
+        if __DEBUG__ then
+            love.graphics.setColor(unpack(self.__colour__))
+            love.graphics.setLineWidth(1)
+            love.graphics.rectangle('line', 0, 0, self:getWidth(), self:getHeight())
+        end
+    end)
 end
 
 -- Don't call this if the object doesn't contain mousePoint or you'll get

@@ -123,7 +123,10 @@ function Grid:handleGainedParent()
 
     self:addItem(ui.Image(bigCanvas), 'image')
     self:addItem(ui.Button(love.graphics.newCanvas(scale,scale)), 'pixel')
-    self:addItem(GridDecals(self:getWidth(), self:getHeight(), scale), 'decals')
+    self:addItem(
+        GridDecals(self:getWidth(), self:getHeight(), scale, self.pixel),
+        'decals'
+    )
     self:getItem('decals').__name__ = "Decals"
 end
 
