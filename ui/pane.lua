@@ -89,28 +89,8 @@ function Pane:update(dt)
 end
 
 function Pane:doDraw()
-    local parentCanvas = love.graphics.getCanvas()
-    local canvas = love.graphics.newCanvas(unpack(self:getDiagonalVec():getXY()))
-    love.graphics.setCanvas(canvas)
-
     for item, k in pairs(self.items) do
         k:draw()
-    end
-
-    love.graphics.setCanvas(parentCanvas)
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(canvas, self.topLeft:getX(), self.topLeft:getY())
-
-    if __DEBUG__ then
-        love.graphics.setColor(unpack(self.__colour__))
-        love.graphics.rectangle('line', self.topLeft:getX(), self.topLeft:getY(), self:getWidth(), self:getHeight())
-        love.graphics.print(self.__name__, self.topLeft:getX() + 5, self.topLeft:getY() + 5)
-
-        local x = 12
-        for item, _ in pairs(self.items) do
-            love.graphics.print(item, self.topLeft:getX() + 5, self.topLeft:getY() + 5 + x)
-            x = x + 12
-        end
     end
 end
 

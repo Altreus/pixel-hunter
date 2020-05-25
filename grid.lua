@@ -45,33 +45,11 @@ end
 -- UI methods
 --------------------------
 
-function Grid:doDraw()
-    local outerCanvas = love.graphics.getCanvas()
-    love.graphics.setColor(1,1,1,1)
-    Grid.super.doDraw(self)
-
-    if self:isBeaten() then
-        love.graphics.setColor(1,1,1,self.fadeInAlpha)
-        love.graphics.rectangle(
-            "fill",
-            0, 0, self:getWidth(), self:getHeight()
-        )
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.rectangle(
-            "fill",
-            unpack(self:getPixelDrawBox())
-        )
-    else
-    end
-
-
-    love.graphics.setColor(1,1,1,1)
-end
-
 function Grid:handleGainedParent()
-    local parentCanvas = love.graphics.getCanvas()
     local scale = scaleFactor(self.gridSize, self.parent:getDiagonalVec())
     self.bottomRight = self.bottomRight * scale
+    -- Drawable gives us a canvas but it didn't know how big. Now we know.
+    self.canvas = love.graphics.newCanvas(self:getWidth(), self:getHeight())
     self:centreIn(self.parent)
 
     -- (We can't do this until we know how big the parent is!)

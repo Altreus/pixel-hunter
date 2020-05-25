@@ -10,6 +10,7 @@ function Drawable:new(...)
     self.__name__ = "Drawable " .. __drawableno__
     __drawableno__ = __drawableno__ + 1
     self.hidden = false
+    self.canvas = love.graphics.newCanvas(self:getWidth(), self:getHeight())
 end
 
 function Drawable:isVisible()
@@ -31,7 +32,24 @@ end
 function Drawable:draw()
     if not self:isVisible() then return end
 
-    self:doDraw()
+    self.canvas:renderTo( function()
+        love.graphics.clear()
+        love.graphics.setColor(1,1,1,1)
+        self:doDraw()
+        if __DEBUG__ then
+            love.graphics.setColor(unpack(self.__colour__))
+            love.graphics.setLineWidth(2)
+            love.graphics.rectangle('line',
+                self.topLeft:getX(), self.topLeft:getY(),
+                self:getWidth(), self:getHeight())
+
+            love.graphics.print(self.__name__,
+                self.topLeft:getX() + 5, self.topLeft:getY() + 5)
+        end
+    end)
+
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(self.canvas, self.topLeft:getX(), self.topLeft:getY())
 end
 
 function Drawable:handleGainedParent() end
