@@ -40,9 +40,9 @@ end
 
 -- Don't call this if the object doesn't contain mousePoint or you'll get
 -- nonsense results
-function mousePointToGridCoords(mousePoint)
-    local gridX = math.floor(mousePoint:getX() / self.pixelSize) * pixelSize
-    local gridY = math.floor(mousePoint:getY() / self.pixelSize) * pixelSize
+function GridDecals:mousePointToGridCoords(mousePoint)
+    local gridX = math.floor(mousePoint:getX() / self.pixelSize) * self.pixelSize
+    local gridY = math.floor(mousePoint:getY() / self.pixelSize) * self.pixelSize
 
     return geo.Vec(gridX, gridY)
 end
