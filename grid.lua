@@ -25,20 +25,6 @@ function Grid:update(dt)
     if self:isBeaten() then return end
 
     Grid.super.update(self,dt)
-
-    local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
-    local alphaStep = 0.8*dt*2
-
-    if love.keyboard.isDown('p') then
-        self:fadeToWhite(alphaStep)
-    end
-end
-
-function Grid:onMouseUp(mousePoint)
-    if self:pixelContains(mousePoint) then
-        self.beaten = true
-        love.mouse.setCursor()
-    end
 end
 
 --------------------------
@@ -79,14 +65,23 @@ function Grid:handleGainedParent()
         canvas:setFilter('nearest', 'nearest')
         love.graphics.draw(canvas, 0, 0, 0, scale)
     end)
+    local decals = GridDecals(self:getWidth(), self:getHeight(), scale, self.pixel)
+    decals.__name__ = "Decals"
+    local button = ui.Button(love.graphics.newCanvas(scale,scale))
+    button:translate(self.pixel * scale)
+    button:addHandler('mouseup', function()
+        self.beaten = true
+    end)
+    button:addHandler('mouseover', function()
+        decals:setFound()
+    end)
+    button:addHandler('mouseout', function()
+        decals:setNotFound()
+    end)
 
     self:addItem(ui.Image(bigCanvas), 'image')
-    self:addItem(ui.Button(love.graphics.newCanvas(scale,scale)), 'pixel')
-    self:addItem(
-        GridDecals(self:getWidth(), self:getHeight(), scale, self.pixel),
-        'decals'
-    )
-    self:getItem('decals').__name__ = "Decals"
+    self:addItem(button, 'pixel')
+    self:addItem(decals, 'decals')
 end
 
 --------------------------
