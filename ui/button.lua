@@ -5,6 +5,7 @@ local Button = Image:extends()
 function Button:onMouseOut(mousePoint)
     __D("Mouse out " .. self.__localname__)
     setCursor()
+    Button.super.onMouseOut(self, mousePoint)
 end
 
 function Button:onMouseOver(mousePoint)
@@ -16,11 +17,11 @@ function Button:onMouseOver(mousePoint)
 
     local cursor = love.mouse.getSystemCursor('hand')
     setCursor(cursor)
+    Button.super.onMouseOver(self, mousePoint)
 end
 
 function Button:contains(vec)
     if not self:isVisible() then
-        __D("Invisible button!" .. self.__localname__)
         return false
     end
 
