@@ -11,6 +11,8 @@ function Drawable:new(...)
     __drawableno__ = __drawableno__ + 1
     self.hidden = false
     self.canvas = love.graphics.newCanvas(self:getWidth(), self:getHeight())
+
+    self.handlers = {}
 end
 
 function Drawable:isVisible()
@@ -52,16 +54,46 @@ function Drawable:draw()
     love.graphics.draw(self.canvas, self.topLeft:getX(), self.topLeft:getY())
 end
 
+function Drawable:addHandler(event, func)
+    self.handlers[event] = self.handlers[event] or {}
+
+    table.insert(self.handlers[event], func)
+end
+
 function Drawable:handleGainedParent() end
 
 function Drawable:update() end
 
-function Drawable:onMouseOver() end
+function Drawable:onMouseOver(vec)
+    if self.handlers.mouseover then
+        for _,h in pairs(self.handlers.mouseover) do
+            h(vec)
+        end
+    end
+end
 
-function Drawable:onMouseOut() end
+function Drawable:onMouseOut(vec)
+    if self.handlers.mouseout then
+        for _,h in pairs(self.handlers.mouseout) do
+            h(vec)
+        end
+    end
+end
 
-function Drawable:onMouseDown() end
+function Drawable:onMouseDown(vec)
+    if self.handlers.mousedown then
+        for _,h in pairs(self.handlers.mousedown) do
+            h(vec)
+        end
+    end
+end
 
-function Drawable:onMouseUp() end
+function Drawable:onMouseUp(vec)
+    if self.handlers.mouseup then
+        for _,h in pairs(self.handlers.mouseup) do
+            h(vec)
+        end
+    end
+end
 
 return Drawable
