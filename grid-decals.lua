@@ -63,7 +63,7 @@ function GridDecals:update(dt)
             )
         end
 
-        if self.found or love.keyboard.isDown('p') then
+        if self.found then
             local pixelVec = self:pointToGridCoords(self.pixelPos)
             love.graphics.setColor(0,0,0,1)
             love.graphics.rectangle(
