@@ -78,8 +78,12 @@ function Grid:handleGainedParent()
     button:addHandler('mouseout', function()
         decals:setNotFound()
     end)
+    local image = ui.Image(bigCanvas)
+    image:setDrawDirect()
+    button:setDrawDirect()
+    decals:setDrawDirect()
 
-    self:addItem(ui.Image(bigCanvas), 'image')
+    self:addItem(image, 'image')
     self:addItem(button, 'pixel')
     self:addItem(decals, 'decals')
 end
