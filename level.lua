@@ -50,7 +50,7 @@ function Level:new(params)
 end
 
 function Level:isBeaten()
-    return self.items.grid:isBeaten()
+    return self.getItem('grid'):isBeaten()
 end
 
 return Level
