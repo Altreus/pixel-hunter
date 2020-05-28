@@ -56,14 +56,20 @@ function Pane:getScreenOffset()
 end
 
 function Pane:onMouseDown(mousePoint)
+    local mousePointRel = mousePoint - self:getScreenOffset()
     for _, k in pairs(self.items) do
-        k:onMouseDown(mousePoint - self:getScreenOffset())
+        if k:contains(mousePointRel) then
+            k:onMouseDown(mousePointRel)
+        end
     end
 end
 
 function Pane:onMouseUp(mousePoint)
+    local mousePointRel = mousePoint - self:getScreenOffset()
     for _, k in pairs(self.items) do
-        k:onMouseUp(mousePoint - self:getScreenOffset())
+        if k:contains(mousePointRel) then
+            k:onMouseUp(mousePointRel)
+        end
     end
 end
 
