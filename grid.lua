@@ -84,6 +84,8 @@ function Grid:handleGainedParent()
     image:setDrawDirect()
     button:setDrawDirect()
     decals:setDrawDirect()
+    button.__name__ = 'pixelbutton'
+    image.__name__ = 'pixelimage'
 
     self:addItem(image, 'image')
     self:addItem(button, 'pixel')
