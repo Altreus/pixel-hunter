@@ -81,6 +81,12 @@ function Drawable:handleGainedParent() end
 function Drawable:update() end
 
 function Drawable:onMouseOver(vec)
+    __D("Mouse over " .. self.__localname__)
+    if not self:isVisible() then
+        __D("... but invisible")
+        return
+    end
+
     if self.handlers.mouseover then
         for _,h in pairs(self.handlers.mouseover) do
             h(vec)
@@ -89,6 +95,12 @@ function Drawable:onMouseOver(vec)
 end
 
 function Drawable:onMouseOut(vec)
+    __D("Mouse out " .. self.__localname__)
+    if not self:isVisible() then
+        __D("... but invisible")
+        return
+    end
+
     if self.handlers.mouseout then
         for _,h in pairs(self.handlers.mouseout) do
             h(vec)
@@ -97,6 +109,12 @@ function Drawable:onMouseOut(vec)
 end
 
 function Drawable:onMouseDown(vec)
+    __D("Mouse down " .. self.__localname__)
+    if not self:isVisible() then
+        __D("... but invisible")
+        return
+    end
+
     if self.handlers.mousedown then
         for _,h in pairs(self.handlers.mousedown) do
             h(vec)
@@ -105,6 +123,12 @@ function Drawable:onMouseDown(vec)
 end
 
 function Drawable:onMouseUp(vec)
+    __D("Mouse up " .. self.__localname__)
+    if not self:isVisible() then
+        __D("... but invisible")
+        return
+    end
+
     if self.handlers.mouseup then
         for _,h in pairs(self.handlers.mouseup) do
             h(vec)
