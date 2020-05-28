@@ -25,10 +25,26 @@ end
 
 function Drawable:hide()
     self.hidden = true
+    self:onMouseOut()
+    self.tangible = false
 end
 
 function Drawable:show()
     self.hidden = false
+    self.tangible = true
+end
+
+-- Not sure if this should be based on parent's tangibility
+function Drawable:isTangible()
+    return self.tangible
+end
+
+function Drawable:tangible()
+    self.tangible = true
+end
+
+function Drawable:intangible()
+    self.tangible = false
 end
 
 function Drawable:setDrawDirect()
@@ -81,9 +97,9 @@ function Drawable:handleGainedParent() end
 function Drawable:update() end
 
 function Drawable:onMouseOver(vec)
-    __D("Mouse over " .. self.__localname__)
-    if not self:isVisible() then
-        __D("... but invisible")
+    __D("Mouse over " .. self.__name__)
+    if not self:isVisible() and not self:isTangible() then
+        __D("... but intangible")
         return
     end
 
@@ -95,9 +111,9 @@ function Drawable:onMouseOver(vec)
 end
 
 function Drawable:onMouseOut(vec)
-    __D("Mouse out " .. self.__localname__)
-    if not self:isVisible() then
-        __D("... but invisible")
+    __D("Mouse out " .. self.__name__)
+    if not self:isVisible() and not self:isTangible() then
+        __D("... but intangible")
         return
     end
 
@@ -109,9 +125,9 @@ function Drawable:onMouseOut(vec)
 end
 
 function Drawable:onMouseDown(vec)
-    __D("Mouse down " .. self.__localname__)
-    if not self:isVisible() then
-        __D("... but invisible")
+    __D("Mouse down " .. self.__name__)
+    if not self:isVisible() and not self:isTangible() then
+        __D("... but intangible")
         return
     end
 
@@ -123,9 +139,9 @@ function Drawable:onMouseDown(vec)
 end
 
 function Drawable:onMouseUp(vec)
-    __D("Mouse up " .. self.__localname__)
-    if not self:isVisible() then
-        __D("... but invisible")
+    __D("Mouse up " .. self.__name__)
+    if not self:isVisible() and not self:isTangible() then
+        __D("... but intangible")
         return
     end
 
