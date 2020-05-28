@@ -1,6 +1,6 @@
 local geo = require "geometry"
-local Class = require "class"
-local HUD = geo.Rect:extends()
+local ui = require 'ui'
+local HUD = ui.Drawable:extends()
 
 function HUD:new()
     local timerFont = love.graphics.newFont('font/UbuntuMono-R.ttf', 40)
@@ -43,7 +43,7 @@ function HUD:update(dt)
     self.timerText:set(text)
 end
 
-function HUD:draw()
+function HUD:doDraw()
     local drawBox = self:asXYHW()
 
     -- It renders as 10 when it's between 10 and 11. This is not the same as
