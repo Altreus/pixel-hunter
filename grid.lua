@@ -76,7 +76,9 @@ function Grid:handleGainedParent()
         decals:setFound()
     end)
     button:addHandler('mouseout', function()
-        decals:setNotFound()
+        if not self.beaten then
+            decals:setNotFound()
+        end
     end)
     local image = ui.Image(bigCanvas)
     image:setDrawDirect()
