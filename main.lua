@@ -29,7 +29,6 @@ function love.load()
 
     local nextLevel = NextLevel()
     game:addItem(nextLevel, 'nextlevel')
-    nextLevel:centreIn(game)
     nextLevel:getItem('nextbutton'):addHandler('mouseup', startNextLevel)
 
     game:addItem(menu,'menu')
@@ -103,6 +102,7 @@ function startNextLevel()
     hud:unpause()
 
     game:getItem('menu'):hide()
+    game:getItem('nextlevel'):centreIn(level)
     game:getItem('nextlevel'):hide()
 end
 
