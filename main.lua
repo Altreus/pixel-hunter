@@ -30,6 +30,7 @@ function love.load()
     local nextLevel = NextLevel()
     game:addItem(nextLevel, 'nextlevel')
     nextLevel:centreIn(game)
+    nextLevel:getItem('nextbutton'):addHandler('mouseup', startNextLevel)
 
     game:addItem(menu,'menu')
 end
@@ -73,20 +74,41 @@ function love.draw()
     game:draw()
 end
 
+function newGame()
+    local hud = HUD()
+    game:addItem(hud, 'hud')
+    startNextLevel()
+end
+
+function startNextLevel()
+    local difficulty = 1
+    if game:getItem('level') then
+        difficulty = game:getItem('level').difficulty + 1
+        game:removeItem('level')
+    end
+
+    local hud = game:getItem('hud')
+    local levelRect = geo.Rect(hud:getWidth(), 0, game:getWidth(), game:getHeight())
+    local level = Level{
+        rect = levelRect:getDiagonalVec():getXY(),
+        difficulty = difficulty
+    }
+
+    game:removeItem('level')
+    game:addItem(level, 'level')
+
+    level:translate(geo.Vec(hud:getWidth(), 0))
+    hud.level = difficulty
+    hud.timer = 30
+    hud:unpause()
+
+    game:getItem('menu'):hide()
+    game:getItem('nextlevel'):hide()
+end
+
 function makeStartButton()
     local startButton = ui.Button(love.graphics.newImage('img/start-button.png'))
-    startButton:addHandler('mouseup', function()
-        local hud = HUD()
-        local levelRect = geo.Rect(hud:getWidth(), 0, game:getWidth(), game:getHeight())
-        local level = Level{rect = levelRect:getDiagonalVec():getXY()}
-
-        game:addItem(hud, 'hud')
-        game:addItem(level, 'level')
-
-        level:translate(geo.Vec(hud:getWidth(), 0))
-
-        game:getItem('menu'):hide()
-    end)
+    startButton:addHandler('mouseup', newGame)
     startButton.__name__ = 'start button'
 
     return startButton

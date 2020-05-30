@@ -60,13 +60,14 @@ function Grid:handleGainedParent()
     local bigCanvas = love.graphics.newCanvas(
         self:getWidth(), self:getHeight()
     )
-
     bigCanvas:renderTo( function()
         canvas:setFilter('nearest', 'nearest')
         love.graphics.draw(canvas, 0, 0, 0, scale)
     end)
+
     local decals = GridDecals(self:getWidth(), self:getHeight(), scale, self.pixel)
     decals.__name__ = "Decals"
+
     local button = ui.Button(love.graphics.newCanvas(scale,scale))
     button:translate(self.pixel * scale)
     button:addHandler('mouseup', function()
@@ -81,6 +82,7 @@ function Grid:handleGainedParent()
             decals:setNotFound()
         end
     end)
+
     local image = ui.Image(bigCanvas)
     image:setDrawDirect()
     button:setDrawDirect()

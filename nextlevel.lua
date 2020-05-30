@@ -4,7 +4,11 @@ local NextLevel = Pane:extends()
 
 function NextLevel:new()
     local nextButton = Button(love.graphics.newImage('img/next-level.png'))
+    nextButton:setDrawDirect()
+
     NextLevel.super.new(self, unpack(nextButton:asXYHW()))
+
+    self.__name__ = "Next Level"
 
     self:addItem(nextButton, 'nextbutton')
     self:hide()

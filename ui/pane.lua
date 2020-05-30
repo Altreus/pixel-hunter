@@ -40,8 +40,10 @@ function Pane:addItem(item, name)
 end
 
 function Pane:removeItem(name)
-    self.items[name].__localname__ = nil
-    self.items[name] = nil
+    if self.items[name] then
+        self.items[name].__localname__ = nil
+        self.items[name] = nil
+    end
 end
 
 function Pane:getItem(name)
