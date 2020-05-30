@@ -32,6 +32,7 @@ end
 function Drawable:show()
     self.hidden = false
     self.tangible = true
+    self:onMouseOver(geo.Vec(love.mouse.getX(), love.mouse.getY()))
 end
 
 -- Not sure if this should be based on parent's tangibility
@@ -41,9 +42,11 @@ end
 
 function Drawable:tangible()
     self.tangible = true
+    self:onMouseOver(geo.Vec(love.mouse.getX(), love.mouse.getY()))
 end
 
 function Drawable:intangible()
+    self:onMouseOut(geo.Vec(love.mouse.getX(), love.mouse.getY()))
     self.tangible = false
 end
 
