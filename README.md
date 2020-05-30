@@ -17,10 +17,6 @@ A grid is the most basic way of showing the pixel size without adding any distra
 
 Should be fairly easy to create a random pattern from various algorithms.
 
-### Image
-
-An image would be great if we could pixellate it to the resolution of the current grid.
-
 ## Zen mode
 
 You can't lose!
