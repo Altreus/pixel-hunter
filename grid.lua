@@ -71,6 +71,7 @@ function Grid:handleGainedParent()
     button:translate(self.pixel * scale)
     button:addHandler('mouseup', function()
         self.beaten = true
+        button:setIntangible()
     end)
     button:addHandler('mouseover', function()
         decals:setFound()
