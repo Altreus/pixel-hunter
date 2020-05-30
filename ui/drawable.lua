@@ -40,12 +40,12 @@ function Drawable:isTangible()
     return self.tangible
 end
 
-function Drawable:tangible()
+function Drawable:setTangible()
     self.tangible = true
     self:onMouseOver(geo.Vec(love.mouse.getX(), love.mouse.getY()))
 end
 
-function Drawable:intangible()
+function Drawable:setIntangible()
     self:onMouseOut(geo.Vec(love.mouse.getX(), love.mouse.getY()))
     self.tangible = false
 end
