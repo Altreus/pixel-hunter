@@ -2,6 +2,7 @@ local geo = require 'geometry'
 local ui = require 'ui'
 local Level = require 'level'
 local HUD = require 'hud'
+local NextLevel = require 'nextlevel'
 
 function __D(x)
     if __DEBUG__ then print(x) end
@@ -25,6 +26,10 @@ function love.load()
     local bgHelpText = makeBackgroundHelpText()
     bgHelpText:translate(geo.Vec(10,10))
     menu:addItem(bgHelpText,'helptext')
+
+    local nextLevel = NextLevel()
+    game:addItem(nextLevel, 'nextlevel')
+    nextLevel:centreIn(game)
 
     game:addItem(menu,'menu')
 end
@@ -59,6 +64,7 @@ function love.mousereleased(x,y,button)
     if game:getItem('level') then
         if game:getItem('level'):isBeaten() then
             game:getItem('hud'):pause()
+            game:getItem('nextlevel'):show()
         end
     end
 end
