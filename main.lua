@@ -12,6 +12,7 @@ function love.load()
         love.graphics.getWidth(),
         love.graphics.getHeight()
     )
+    game.__name__  = "Game"
     game.score = 0
 
     local menu = ui.Pane(game:getWidth(), game:getHeight())

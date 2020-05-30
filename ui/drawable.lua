@@ -94,7 +94,7 @@ function Drawable:handleGainedParent() end
 function Drawable:update() end
 
 function Drawable:onMouseOver(vec)
-    __D("Mouse over " .. self.__name__)
+    __D("Mouse over " .. self.__name__ .. " at " .. vec:toString())
     if not self:isVisible() and not self:isTangible() then
         __D("... but intangible")
         return
@@ -108,7 +108,7 @@ function Drawable:onMouseOver(vec)
 end
 
 function Drawable:onMouseOut(vec)
-    __D("Mouse out " .. self.__name__)
+    __D("Mouse out " .. self.__name__ .. " at " .. vec:toString())
     if not self:isVisible() and not self:isTangible() then
         __D("... but intangible")
         return
@@ -122,7 +122,7 @@ function Drawable:onMouseOut(vec)
 end
 
 function Drawable:onMouseDown(vec)
-    __D("Mouse down " .. self.__name__)
+    __D("Mouse down " .. self.__name__ .. " at " .. vec:toString())
     if not self:isVisible() and not self:isTangible() then
         __D("... but intangible")
         return
@@ -136,7 +136,7 @@ function Drawable:onMouseDown(vec)
 end
 
 function Drawable:onMouseUp(vec)
-    __D("Mouse up " .. self.__name__)
+    __D("Mouse up " .. self.__name__ .. " at " .. vec:toString())
     if not self:isVisible() and not self:isTangible() then
         __D("... but intangible")
         return
