@@ -58,8 +58,18 @@ end
 function Drawable:draw()
     if not self:isVisible() then return end
 
-    local draw = function()
+    if self.drawDirect then
         self:doDraw()
+    else
+        self.canvas:renderTo( function()
+            love.graphics.clear()
+            love.graphics.setColor(1,1,1,1)
+            self:doDraw()
+        end)
+
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(self.canvas, self.topLeft:getX(), self.topLeft:getY())
+
         if __DEBUG__ then
             love.graphics.setColor(unpack(self.__colour__))
             love.graphics.setLineWidth(2)
@@ -70,19 +80,6 @@ function Drawable:draw()
             love.graphics.print(self.__name__,
                 self.topLeft:getX() + 5, self.topLeft:getY() + 5)
         end
-    end
-
-    if self.drawDirect then
-        draw()
-    else
-        self.canvas:renderTo( function()
-            love.graphics.clear()
-            love.graphics.setColor(1,1,1,1)
-            draw()
-        end)
-
-        love.graphics.setColor(1,1,1,1)
-        love.graphics.draw(self.canvas, self.topLeft:getX(), self.topLeft:getY())
     end
 end
 

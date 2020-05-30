@@ -55,7 +55,9 @@ function Pane:getScreenOffset()
     return offset
 end
 
+-- This mouse point is already relative to the parent!
 function Pane:onMouseDown(mousePoint)
+    local mousePointRel = mousePoint - self.topLeft
     local mousePointRel = mousePoint - self:getScreenOffset()
     for _, k in pairs(self.items) do
         if k:contains(mousePointRel) then
