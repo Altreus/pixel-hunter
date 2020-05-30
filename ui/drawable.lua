@@ -25,7 +25,7 @@ end
 
 function Drawable:hide()
     self.hidden = true
-    self:onMouseOut()
+    self:onMouseOut(geo.Vec(love.mouse.getX(), love.mouse.getY()))
     self.tangible = false
 end
 
