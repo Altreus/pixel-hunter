@@ -10,6 +10,26 @@ function Pane:new(...)
     self.mouseOvers = {}
     self.__name__ = "Pane " .. __paneno__
     __paneno__ = __paneno__ + 1
+
+    -- This mouse point is already relative to the parent!
+    self:addHandler('mousedown', function(mousePoint)
+        local mousePointRel = mousePoint - self.topLeft
+        local mousePointRel = mousePoint - self:getScreenOffset()
+        for _, k in pairs(self.items) do
+            if k:contains(mousePointRel) then
+                k:onMouseDown(mousePointRel)
+            end
+        end
+    end)
+
+    self:addHandler('mouseup', function(mousePoint)
+        local mousePointRel = mousePoint - self.topLeft
+        for _, k in pairs(self.items) do
+            if k:contains(mousePointRel) then
+                k:onMouseUp(mousePointRel)
+            end
+        end
+    end)
 end
 
 function Pane:addItem(item, name)
@@ -55,26 +75,6 @@ function Pane:getScreenOffset()
     return offset
 end
 
--- This mouse point is already relative to the parent!
-function Pane:onMouseDown(mousePoint)
-    local mousePointRel = mousePoint - self.topLeft
-    local mousePointRel = mousePoint - self:getScreenOffset()
-    for _, k in pairs(self.items) do
-        if k:contains(mousePointRel) then
-            k:onMouseDown(mousePointRel)
-        end
-    end
-end
-
--- This mouse point is already relative to the parent!
-function Pane:onMouseUp(mousePoint)
-    local mousePointRel = mousePoint - self.topLeft
-    for _, k in pairs(self.items) do
-        if k:contains(mousePointRel) then
-            k:onMouseUp(mousePointRel)
-        end
-    end
-end
 
 function Pane:update(dt)
     local mousePoint = geo.Vec(love.mouse.getX(), love.mouse.getY())
