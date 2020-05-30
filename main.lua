@@ -55,10 +55,9 @@ function love.mousereleased(x,y,button)
     local mousePoint = geo.Vec(x,y)
     game:onMouseUp(mousePoint)
 
-    if game.level then
-        game.level:onMouseUp(mousePoint)
-        if game.level:isBeaten() then
-            game.hud:pause()
+    if game:getItem('level') then
+        if game:getItem('level'):isBeaten() then
+            game:getItem('hud'):pause()
         end
     end
 end
