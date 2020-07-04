@@ -17,6 +17,12 @@ function Drawable:new(...)
     self.handlers = {}
 end
 
+function Drawable:resize(x,y)
+    self.bottomRight:setX(x + self.topLeft:getX())
+    self.bottomRight:setY(y + self.topLeft:getY())
+    self.canvas = love.graphics.newCanvas(self:getWidth(), self:getHeight())
+end
+
 function Drawable:isVisible()
     if self.parent then
         return self.parent:isVisible() and not self.hidden
