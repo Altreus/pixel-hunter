@@ -50,7 +50,7 @@ function Pane:getItem(name)
     return self.items[name]
 end
 
-function Pane:fitToSize()
+function Pane:getBoundingBox()
     local maxH = 0
     local maxW = 0
 
@@ -63,8 +63,11 @@ function Pane:fitToSize()
         error("Could not determine size of pane. Is it empty?")
     end
 
-    self.bottomRight:setX(self.topLeft:getX() + maxW)
-    self.bottomRight:setY(self.topLeft:getY() + maxH)
+    return geo.Vec(maxW, maxH)
+end
+
+function Pane:fitToSize()
+    self:resize(unpack(self:getBoundingBox():getXY()))
 end
 
 function Pane:getScreenOffset()
