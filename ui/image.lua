@@ -13,7 +13,7 @@ end
 
 function Image:doDraw()
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(self.buf, 0,0)
+    love.graphics.draw(self.buf, self.topLeft:getX(), self.topLeft:getY())
 end
 
 return Image
