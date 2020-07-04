@@ -12,6 +12,7 @@ function Drawable:new(...)
     self.hidden = false
     self.tangible = true
     self.canvas = love.graphics.newCanvas(self:getWidth(), self:getHeight())
+    self.colour = {1,1,1,1}
 
     self.handlers = {}
 end
