@@ -60,11 +60,16 @@ function love.mousereleased(x,y,button)
 
     local mousePoint = geo.Vec(x,y)
     game:onMouseUp(mousePoint)
+    local hud = game:getItem('hud')
+    local level = game:getItem('level')
 
-    if game:getItem('level') then
-        if game:getItem('level'):isBeaten() then
-            game:getItem('hud'):pause()
-            game:getItem('nextlevel'):show()
+    if level then
+        if level:isBeaten() then
+            local baseScore = 5000
+            baseScore = baseScore + (baseScore * 0.06 * level.difficulty)
+            local scoreWithTimePenalty = (baseScore / 30) * hud.timer
+            hud:pause()
+            game:getItem('nextlevel'):show(math.floor(scoreWithTimePenalty))
         end
     end
 end

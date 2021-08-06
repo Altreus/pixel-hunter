@@ -68,13 +68,14 @@ function Drawable:draw()
     if not self:isVisible() then return end
 
     if self.drawDirect then
+        love.graphics.setColor(unpack(self.colour))
         self:doDraw()
     else
         local pos = self.topLeft
         self:translateTo(geo.Vec(0,0))
         self.canvas:renderTo( function()
             love.graphics.clear()
-            love.graphics.setColor(1,1,1,1)
+            love.graphics.setColor(unpack(self.colour))
             self:doDraw()
         end)
         self:translateTo(pos)
